@@ -19,6 +19,7 @@ runs:
   steps:
 
       - name: Install dependencies
+        shell: powershell
         run: pip install -r requirements.txt
 
       # - name: Cache Nuitka dependencies
@@ -30,7 +31,7 @@ runs:
       #       ${{ runner.OS }}-nuitka-cache-
 
       - name: Build EXE
-        timeout-minutes: 10
+        shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
           python -m nuitka `
