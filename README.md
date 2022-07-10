@@ -18,18 +18,44 @@ jobs:
       # Check-out repository
       - uses: actions/checkout@v3
 
+      # Setup Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
       # Build python script into a stand-alone exe
-      - uses: jimkring/nuitka-build-executable-from-python-script@main
+      - uses: jimkring/python-script-to-executable@main
         with:
           script-name: test.py
-      
+
       # Uploads artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: exe
           path: build/test.exe
+    steps:
+      # Check-out repository
+      - uses: actions/checkout@v3
 
+      # Setup Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      # Build python script into a stand-alone exe
+      - uses: jimkring/python-script-to-executable@main
+        with:
+          script-name: hello_world.py
+
+      # Uploads artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: exe
+          path: build/hello_world.exe
 ```
 
 # Limitations
