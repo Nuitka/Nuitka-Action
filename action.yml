@@ -1,0 +1,41 @@
+name: Build EXE
+
+description: 'Build EXE from python script with Nuitka'
+
+inputs:
+  output-dir:
+    required: false
+    type: string
+    description: 'Directory for output builds'
+    default: build
+  script-name:
+    required: true
+    type: string
+    description: 'name or path to python script'
+
+
+runs:
+  using: "composite"
+  steps:
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # - name: Cache Nuitka dependencies
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ~/AppData/Local/Nuitka
+      #     key: ${{ runner.OS }}-nuitka-cache-${{ hashFiles('**/requirements*.txt') }}
+      #     restore-keys: |
+      #       ${{ runner.OS }}-nuitka-cache-
+
+      - name: Build EXE
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m nuitka `
+          --assume-yes-for-downloads `
+          --standalone `
+          --onefile `
+          --output-dir="${{ inputs.output-dir }}" `
+          ${{ inputs.script-name }}
