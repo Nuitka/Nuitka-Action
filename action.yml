@@ -18,7 +18,7 @@ runs:
   using: "composite"
   steps:
 
-      - name: Install dependencies
+      - name: Install Dependencies
         shell: powershell
         run: |
           $github_action_path = "${{ github.action_path }}"
@@ -26,14 +26,6 @@ runs:
           $github_action_path = $github_action_path -replace "\\\./", "\"
           $github_action_path = $github_action_path -replace "/", "\"
           pip install -r "$github_action_path\requirements.txt"
-
-      # - name: Cache Nuitka dependencies
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/AppData/Local/Nuitka
-      #     key: ${{ runner.OS }}-nuitka-cache-${{ hashFiles('**/requirements*.txt') }}
-      #     restore-keys: |
-      #       ${{ runner.OS }}-nuitka-cache-
 
       - name: Build EXE
         shell: powershell
