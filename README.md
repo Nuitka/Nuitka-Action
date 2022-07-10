@@ -16,7 +16,7 @@ hello world!
 ```
 
 ## 2) Build an executable
-Use this action in your project's CI workflow:
+Use this action as a step in one of your project's CI workflow jobs:
 ```yaml
 # Build python script into a stand-alone exe
 - uses: jimkring/python-script-to-executable@main
