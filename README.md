@@ -19,7 +19,7 @@ hello world!
 Use this action as a step in one of your project's CI workflow jobs ([details below](#usage-details)):
 ```yaml
 # Build python script into a stand-alone exe
-- uses: jimkring/python-script-to-executable@main
+- uses: jimkring/python-script-to-executable@v0.1.1
   with:
     script-name: hello_world.py
 ```
@@ -57,7 +57,7 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       # Build python script into a stand-alone exe
-      - uses: jimkring/python-script-to-executable@main
+      - uses: jimkring/python-script-to-executable@v0.1.1
         with:
           script-name: hello_world.py
 
