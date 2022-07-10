@@ -32,11 +32,6 @@ jobs:
 
 ```
 
-## Inbound License Compliance is your Responsibility (i.e. dependencies)
-
-> **_Important:_** It is your responsibility to comply with the license terms of the packages and software libraries used by your python script (i.e. the package dependencies of your project), as these will be compiled or (in the case of DLLs) copied into the resulting executable to form a combined and/or derivative work.
-
-
 # Limitations
 
 - Currently, this action will use the python version that gets run via the `python` command on the runner. So, you should [setup-python](https://github.com/actions/setup-python) on the runner in a step prior to calling this action.
@@ -77,3 +72,19 @@ The scripts and documentation in this project are released under the [MIT Licens
 Nuitka is licensed under the [Apache 2.0 License](https://github.com/Nuitka/Nuitka/blob/develop/LICENSE.txt)
 
 Python is licensed under the [Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
+
+## You are Reponsible for Complying with your Project's Dependencies' Licenses 
+
+This tool compiles and/or copies your project's package dependencies (and their dependencies) into the output executable, which will be considered a combined and/or derivative work of those packages.
+
+> **_Important:_** You are responsibile for compliance with the licenses of your project's package dependencies. Please consult with an attorney about your individual/project's compliance needs and strategy.
+
+## How to Comply With Dependency Package Licenses
+
+There are some great license checker tools that you might consider integrating with your project. Generally speaking, they enable you to specify which licenses (or types) are approved or disaproved and alert you whenever your project has a package dependency that is not approved.
+
+Here are a couple license checker tools:
+
+- [python-license-check](https://github.com/dhatim/python-license-check) - can be run as a GitHub pre-commit hook.
+- [dependencies-license-compliance-checker](https://github.com/marketplace/actions/dependencies-license-compliance-checker) - a github action that can be run before your executable build.
+
