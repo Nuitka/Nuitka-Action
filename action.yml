@@ -20,7 +20,12 @@ runs:
 
       - name: Install dependencies
         shell: powershell
-        run: pip install -r requirements.txt
+        run: |
+          $github_action_path = "${{ github.action_path }}"
+          # Fixes: C:\actions-runner\_work\repo\repo\./.github/actions/action-name
+          $github_action_path = $github_action_path -replace "\\\./", "\"
+          $github_action_path = $github_action_path -replace "/", "\"
+          pip install -r "$github_action_path\requirements.txt"
 
       # - name: Cache Nuitka dependencies
       #   uses: actions/cache@v1
