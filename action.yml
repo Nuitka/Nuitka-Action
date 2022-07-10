@@ -7,15 +7,88 @@ branding:
 description: 'Build a stand-alone exe from a python script using nuitka'
 
 inputs:
-  output-dir:
-    required: false
-    type: string
-    description: 'Directory for output builds'
-    default: build
+
+  ### Only Required Input ###
   script-name:
     required: true
-    type: string
-    description: 'name or path to python script'
+    description: 'name or path to python script that is to be built'
+
+  ### Nuitka Options ###
+  module:
+    type: boolean
+    default: false
+    description: 'Create an extension module executable instead of a program. Defaults to off.'
+  standalone:
+    type: boolean
+    default: true
+    description: 'Enable standalone mode for output. This allows you to transfer the created binary to other machines without it using an existing Python installation. This also means it will become big. It implies these option: "-- follow-imports" and "--python-flag=no_site". Defaults to true.'
+  onefile:
+    type: boolean
+    default: true
+    description: 'On top of standalone mode, enable onefile mode. This means not a folder, but a compressed executable is created and used. Defaults to true.'
+  assume-yes-for-downloads:
+    type: boolean
+    default: true
+    description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
+
+  ### Control the inclusion of modules and packages in result. ###
+  include-package:
+    description: 'Include a whole package. Give as a Python namespace, e.g. "some_package.sub_package" and Nuitka will then find it and include it and all the modules found below that disk location in the binary or extension module it creates, and make it available for import by the code. To avoid unwanted sub packages, e.g. tests you can e.g. do this "--nofollow-import-to=*.tests". Default empty.'
+  include-module:
+    description: 'Include a single module. Give as a Python namespace, e.g. "some_package.some_module" and Nuitka will then find it and include it in the binary or extension module it creates, and make it available for import by the code. Default empty.'
+  include-plugin-directory:
+    description: 'Include the content of that directory, no matter if it's used by the given main program in a visible form. Overrides all other inclusion options. Can be given multiple times. Default empty.'
+  include-plugin-files:
+    description: 'Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty.'
+  prefer-source-code:
+    description: 'For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off.'
+
+  ### Output choices ##
+  output-dir:
+    description: 'Directory for output builds'
+    default: 'build'
+  output-file:
+    description: 'Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)'
+    required: false
+
+  # Enable Commercial features of Nuitka using a PAT (access token)
+  access-token:
+    description: 'github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo'
+
+  enable-console:
+    type: boolean
+    description: 'When compiling for Windows or macOS, enable the console window and create a console application. This disables hints from certain modules, e.g. "PySide" that suggest to disable it. Defaults to true.'
+    default: true
+  disable-console:
+    type: boolean
+    default: false
+    description: 'When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false.'
+
+  # Windows specific controls
+  windows-icon-from-ico:
+    description: Add executable icon. Can be given multiple times for different resolutions or files with multiple icons inside. In the later case, you may also suffix with \#<n> where n is an integer index starting from 1, specifying a specific icon to be included, and all others to be ignored.
+  windows-uac-admin:
+    description: Request Windows User Control, to grant admin rights on execution. (Windows only). Defaults to off.
+    type: boolean
+    default: false
+  windows-uac-uiaccess:
+    description: 'Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off.'
+    type: boolean
+    default: false
+  windows-company-name:
+    description: Name of the company to use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
+    default: ${{ env.GITHUB_REPOSITORY_OWNER }}
+  windows-product-name:
+    description: Name of the product to use in Windows Version information. Defaults to base filename of the binary.
+  windows-file-version:
+    description: File version to use in Windows Version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+  windows-product-version:
+    description: Product version to use in Windows Version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+  windows-file-description:
+    description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
+  windows-onefile-tempdir-spec:
+    description: Use this as a temporary folder. Defaults to '%TEMP%\onefile_%PID%_%TIME%', i.e. system temporary directory.
+
 
 
 runs:
@@ -30,14 +103,31 @@ runs:
           $github_action_path = $github_action_path -replace "\\\./", "\"
           $github_action_path = $github_action_path -replace "/", "\"
           pip install -r "$github_action_path\requirements.txt"
+          if ("${{ inputs.access-token }}" -ne ''){
+            pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
+          }
 
       - name: Build EXE
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
-          python -m nuitka `
-          --assume-yes-for-downloads `
-          --standalone `
-          --onefile `
-          --output-dir="${{ inputs.output-dir }}" `
-          ${{ inputs.script-name }}
+          $args = @()
+          if ("${{ inputs.module }}" -ne '${{ false }}'){
+            $args += @('--module',)
+          }
+          if ("${{ inputs.standalone }}" -eq '${{ true }}' && "${{ inputs.module }}" -ne '${{ true }}'){
+            $args += @('--standalone',)
+          }
+          if ("${{ inputs.onefile }}" -eq '${{ true }}' && "${{ inputs.standalone }}" -eq '${{ true }}' && "${{ inputs.module }}" -ne '${{ true }}'){
+            $args += @('--onefile',)
+          }
+          if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
+            $args += @('--assume-yes-for-downloads',)
+          }
+          if ("${{ inputs.output-dir }}" -ne ''){
+            $args += @('--output-dir="${{ inputs.output-dir }}"',)
+          }
+          if ("${{ inputs.output-file }}" -ne ''){
+            $args += @('-o', '"${{ inputs.output-file }}"',)
+          }
+          python -m nuitka $args "${{ inputs.script-name }}"
