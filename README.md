@@ -1,8 +1,36 @@
 # Python-Script-to-Executable
 
-This builds a stand-alone executable from a python script using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
+This is a GitHub Action that builds a stand-alone executable from a python script in your project using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
 
-# Usage
+# Simple to Use
+See [Usage Details](#usage-details) below for more info.
+## 1) Create a python script
+```python
+## hello_world.py
+print("hello world!")
+```
+Run it in python
+```
+C:\> python hello_world.py
+hello world!
+```
+
+## 2) Build an executable
+Use this action in your project's CI workflow:
+```yaml
+# Build python script into a stand-alone exe
+- uses: jimkring/python-script-to-executable@main
+  with:
+    script-name: hello_world.py
+```
+
+## 3) Run the exectuable
+```
+C:\> hello_world.exe
+hello world!
+```
+
+# Usage Details
 
 See [action.yml](action.yml)
 
