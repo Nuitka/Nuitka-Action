@@ -1,10 +1,10 @@
-name: Build EXE
+name: Build EXE from Python Script
 
 branding:
   icon: 'package'  
   color: 'blue'
 
-description: 'Build EXE from python script with Nuitka'
+description: 'Build's a stand-alone exe from a python script using nuitka'
 
 inputs:
   output-dir:
