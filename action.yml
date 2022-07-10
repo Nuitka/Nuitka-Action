@@ -4,7 +4,7 @@ branding:
   icon: 'package'  
   color: 'blue'
 
-description: 'Build's a stand-alone exe from a python script using nuitka'
+description: 'Build a stand-alone exe from a python script using nuitka'
 
 inputs:
   output-dir:
