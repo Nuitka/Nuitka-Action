@@ -1,6 +1,6 @@
-# Nuitka-Build-Executable-from-Python-Script
+# Python-Script-to-Executable
 
-This builds a stand-alone executable from a python script using [nuitka](https://github.com/Nuitka/Nuitka), the python compiler.
+This builds a stand-alone executable from a python script using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
 
 # Usage
 
