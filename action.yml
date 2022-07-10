@@ -1,4 +1,6 @@
 name: Build EXE
+icon: package
+color: blue
 
 description: 'Build EXE from python script with Nuitka'
 
