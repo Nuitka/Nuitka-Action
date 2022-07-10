@@ -32,9 +32,11 @@ hello world!
 
 # Usage Details
 
-See [action.yml](action.yml)
+See [action.yml](action.yml) for details on how this action works under the hood.
 
 ### Build a python script into an exe
+
+See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for an example of this workflow being used.
 
 ```yaml
 jobs:
@@ -67,22 +69,16 @@ jobs:
           path: build/hello_world.exe
 ```
 
-# Limitations
+# Limitations (and Roadmap)
 
-- Currently, this action will use the python version that gets run via the `python` command on the runner. So, you should [setup-python](https://github.com/actions/setup-python) on the runner in a step prior to calling this action.
-
-# Roadmap
-
-- Add input parameters for various nuitka build settings and options
-- Support for Mac and Linux
-- Allow specifying desired python version
-- Optional caching nuitka dependencies (that it self downloads when needed)
-- Option to not install package dependencies and rely on dependencies being set in the calling workflow
-- Create a repo with various examples and tests for this action
+- No input parameters yet for the many options provided by Nuitka for building the exe.
+- No support yet for Mac and Linux [Roadmap].
+- Cannot yet override the hard-coded versions of Nuitka and its dependencies which may conflict with the dependencies of your project. Need an option to not upgrade/downgrade these if they are already installed.
+- Not many examples that demonstrate this action in use.
 
 ### Python and Package Dependencies
 
-This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo)
+This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
 
 ```
 nuitka==0.9.4
