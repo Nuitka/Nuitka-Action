@@ -46,7 +46,7 @@ inputs:
   ### Output choices ##
   output-dir:
     description: 'Directory for output builds'
-    default: 'build'
+    default: build
   output-file:
     description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
     required: false
