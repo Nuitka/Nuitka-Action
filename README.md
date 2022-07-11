@@ -1,6 +1,6 @@
 # Python-Script-to-Executable
 
-This is a GitHub Action that builds a stand-alone executable from a python script in your project using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
+This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executable binaries from a python script using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
 
 # Simple to Use
 See [Usage Details](#usage-details) below for more info.
@@ -30,13 +30,25 @@ C:\> hello_world.exe
 hello world!
 ```
 
+## Key Features
+
+- Build an executable binary from your python script (stand-alone binaries or binary modules that can be called by python)
+- Support for Windows, Mac (including .app bundles), and Linux
+- Generally speaking, all the features of [Nuitka](https://github.com/Nuitka/Nuitka)
+
+## Current Limitations
+
+- Not all Nuitka options are currently exposed as input parameters to this action.
+- The version of the Nuitka package (and its dependencies) are currently hard-coded. Eventually, we'll add support for you to specify versions of these packages -- probably just by disabling installing these packages as part of the action so you can do it in your workflow.
+- Not many examples yet that demonstrate how to use this action in practice.
+
 # Usage Details
 
 See [action.yml](action.yml) for details on how this action works under the hood.
 
 ### Build a python script into an exe
 
-See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for an example of this workflow being used.
+See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for examples of this workflow in action.
 
 ```yaml
 jobs:
@@ -68,13 +80,6 @@ jobs:
           name: exe
           path: build/hello_world.exe
 ```
-
-# Limitations (and Roadmap)
-
-- No input parameters yet for the many options provided by Nuitka for building the exe.
-- No support yet for Mac and Linux [Roadmap].
-- Cannot yet override the hard-coded versions of Nuitka and its dependencies which may conflict with the dependencies of your project. Need an option to not upgrade/downgrade these if they are already installed.
-- Not many examples that demonstrate this action in use.
 
 ### Python and Package Dependencies
 
