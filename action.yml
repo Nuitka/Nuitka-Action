@@ -77,7 +77,7 @@ inputs:
     default: false
   windows-company-name:
     description: Name of the company to use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
-    default: "${{ env.GITHUB_REPOSITORY_OWNER }}"
+    default: "${{ github.repository_owner }}"
   windows-product-name:
     description: Name of the product to use in Windows Version information. Defaults to base filename of the binary.
   windows-file-version:
