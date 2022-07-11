@@ -90,10 +90,10 @@ inputs:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
 
   # macOS specific controls:
-    macos-create-app-bundle:
-      description: 'When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false.'
-      type: boolean
-      default: false
+  macos-create-app-bundle:
+    description: 'When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false.'
+    type: boolean
+    default: false
 
 runs:
   using: "composite"
