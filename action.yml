@@ -48,7 +48,7 @@ inputs:
     description: 'Directory for output builds'
     default: 'build'
   output-file:
-    description: 'Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)'
+    description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
     required: false
 
   # Enable Commercial features of Nuitka using a PAT (access token)
@@ -87,7 +87,7 @@ inputs:
   windows-file-description:
     description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
   windows-onefile-tempdir-spec:
-    description: Use this as a temporary folder. Defaults to '%TEMP%\onefile_%PID%_%TIME%', i.e. system temporary directory.
+    description: "Use this as a temporary folder. Defaults to '%TEMP%\onefile_%PID%_%TIME%', i.e. system temporary directory."
 
 
 
