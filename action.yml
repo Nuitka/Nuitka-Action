@@ -77,7 +77,7 @@ inputs:
     default: false
   windows-company-name:
     description: Name of the company to use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
-    default: ${{ env.GITHUB_REPOSITORY_OWNER }}
+    default: "${{ env.GITHUB_REPOSITORY_OWNER }}"
   windows-product-name:
     description: Name of the product to use in Windows Version information. Defaults to base filename of the binary.
   windows-file-version:
@@ -87,7 +87,7 @@ inputs:
   windows-file-description:
     description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
   windows-onefile-tempdir-spec:
-    description: "Use this as a temporary folder. Defaults to '%TEMP%\onefile_%PID%_%TIME%', i.e. system temporary directory."
+    description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
 
 
 
