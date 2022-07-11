@@ -37,7 +37,7 @@ inputs:
   include-module:
     description: 'Include a single module. Give as a Python namespace, e.g. "some_package.some_module" and Nuitka will then find it and include it in the binary or extension module it creates, and make it available for import by the code. Default empty.'
   include-plugin-directory:
-    description: 'Include the content of that directory, no matter if it's used by the given main program in a visible form. Overrides all other inclusion options. Can be given multiple times. Default empty.'
+    description: 'Include the content of that directory, no matter if it is used by the given main program in a visible form. Overrides all other inclusion options. Can be given multiple times. Default empty.'
   include-plugin-files:
     description: 'Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty.'
   prefer-source-code:
