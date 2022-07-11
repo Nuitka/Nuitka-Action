@@ -113,21 +113,21 @@ runs:
           $ErrorActionPreference = 'Stop'
           $args = @()
           if ("${{ inputs.module }}" -ne '${{ false }}'){
-            $args += @('--module',)
+            $args += @('--module')
           }
           if ("${{ inputs.standalone }}" -eq '${{ true }}' && "${{ inputs.module }}" -ne '${{ true }}'){
-            $args += @('--standalone',)
+            $args += @('--standalone')
           }
           if ("${{ inputs.onefile }}" -eq '${{ true }}' && "${{ inputs.standalone }}" -eq '${{ true }}' && "${{ inputs.module }}" -ne '${{ true }}'){
-            $args += @('--onefile',)
+            $args += @('--onefile')
           }
           if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
-            $args += @('--assume-yes-for-downloads',)
+            $args += @('--assume-yes-for-downloads')
           }
           if ("${{ inputs.output-dir }}" -ne ''){
-            $args += @('--output-dir="${{ inputs.output-dir }}"',)
+            $args += @('--output-dir="${{ inputs.output-dir }}"')
           }
           if ("${{ inputs.output-file }}" -ne ''){
-            $args += @('-o', '"${{ inputs.output-file }}"',)
+            $args += @('-o', '"${{ inputs.output-file }}"')
           }
           python -m nuitka $args "${{ inputs.script-name }}"
