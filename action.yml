@@ -90,12 +90,12 @@ inputs:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
 
 
-
 runs:
   using: "composite"
   steps:
 
-      - name: Install Dependencies
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
         shell: powershell
         run: |
           $github_action_path = "${{ github.action_path }}"
@@ -103,11 +103,21 @@ runs:
           $github_action_path = $github_action_path -replace "\\\./", "\"
           $github_action_path = $github_action_path -replace "/", "\"
           pip install -r "$github_action_path\requirements.txt"
-          if ("${{ inputs.access-token }}" -ne ''){
+          if ("${{ inputs.access-token }}" != ""){
             pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
           }
 
-      - name: Build EXE
+      - name: Install Dependencies (macOS and Linux)
+        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+        shell: bash
+        run: |
+          pip install -r "$github_action_path/requirements.txt"
+          if [ "${{ inputs.access-token }}" != "" ]; then
+            pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
+          fi
+
+      - name: Build Executable (Windows)
+        if: runner.os == 'Windows'
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
@@ -131,3 +141,31 @@ runs:
             $args += @('-o', '"${{ inputs.output-file }}"')
           }
           python -m nuitka $args "${{ inputs.script-name }}"
+
+      - name: Build Executable (macOS and Linux)
+        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+        shell: bash
+        run: |
+          ARGS = ""
+          if [ "${{ inputs.access-token }}" != "" ]; then
+            pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka"
+          fi
+          if [ "${{ inputs.module }}" != "${{ false }}" ]; then
+            ARGS += "--module"
+          }
+          if [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+            ARGS += "--standalone"
+          }
+          if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+            ARGS += "--onefile"
+          }
+          if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
+            ARGS += "--assume-yes-for-downloads"
+          }
+          if [ "${{ inputs.output-dir }}" != ""){
+            ARGS += "--output-dir=\"${{ inputs.output-dir }}\""
+          }
+          if [ "${{ inputs.output-file }}" != "" ]; then
+            ARGS += "-o \"${{ inputs.output-file }}\""
+          }
+          python -m nuitka $ARGS "${{ inputs.script-name }}"
