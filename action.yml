@@ -138,7 +138,7 @@ runs:
             $args += @('--output-dir="${{ inputs.output-dir }}"')
           }
           if ("${{ inputs.output-file }}" -ne ''){
-            $args += @('-o', '"${{ inputs.output-file }}"')
+            $args += @('-o', '${{ inputs.output-file }}')
           }
           python -m nuitka $args "${{ inputs.script-name }}"
 
@@ -164,9 +164,9 @@ runs:
             ARGS+=" --assume-yes-for-downloads"
           fi
           if [ "${{ inputs.output-dir }}" != "" ]; then
-            ARGS+=" --output-dir=\"${{ inputs.output-dir }}\""
+            ARGS+=" --output-dir=${{ inputs.output-dir }}"
           fi
           if [ "${{ inputs.output-file }}" != "" ]; then
-            ARGS+=" -o \"${{ inputs.output-file }}\""
+            ARGS+=" -o ${{ inputs.output-file }}"
           fi
           python -m nuitka $ARGS "${{ inputs.script-name }}"
