@@ -162,7 +162,7 @@ runs:
           if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
             ARGS+="--assume-yes-for-downloads"
           }
-          if [ "${{ inputs.output-dir }}" != ""){
+          if [ "${{ inputs.output-dir }}" != "" ]; then
             ARGS+="--output-dir=\"${{ inputs.output-dir }}\""
           }
           if [ "${{ inputs.output-file }}" != "" ]; then
