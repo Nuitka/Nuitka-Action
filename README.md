@@ -46,7 +46,7 @@ hello world!
 
 See [action.yml](action.yml) for details on how this action works under the hood.
 
-### Build a python script into an exe
+## Build a python script into an exe
 
 See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for examples of this workflow in action.
 
@@ -81,7 +81,7 @@ jobs:
           path: build/hello_world.exe
 ```
 
-### Python and Package Dependencies
+## Python and Package Dependencies
 
 This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
 
@@ -96,7 +96,63 @@ zstandard==0.18.0
     # via -r requirements.in
 ```
 
-## Additional Documentation
+## Multi-Platform Builds
+
+To build for a given platform, just choose a runner of the appropriate operating system.  You can even build for multiple platforms in a single workflow using a matrix strategy, as shown below:
+
+Here we see a workflow from the [jimkring/kasa-cli](https://github.com/jimkring/kasa-cli) project.
+
+```yaml
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+      
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+          cache: 'pip'
+          cache-dependency-path: |
+            **/requirements*.txt
+            
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-dev.txt
+          
+      - Name: Build Executable
+        uses: jimkring/python-script-to-exe@v0.2.0
+        with:
+          script-name: kasa_cli
+          onefile: true
+  
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.os }} Build
+          path: |
+            build/*.exe
+            build/*.bin
+            build/*.app/**/*
+```
+
+And, here's what a resulting job run looks like:
+
+https://github.com/jimkring/kasa-cli/actions/runs/2682890462
+
+![image](https://user-images.githubusercontent.com/381432/179555752-021fd3d6-3f33-4f5f-bc44-0461491813fc.png)
+
+You can see that executable binaries were created for Mac, Linux, and Windows.
+
+# Additional Documentation
 
 See [Nuitka](https://github.com/Nuitka/Nuitka) for full documentation on Nuitka. It's really a fantastic tool!
 
