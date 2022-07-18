@@ -2,6 +2,12 @@
 
 This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executable binaries from a python script using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
 
+## Key Features
+
+- Build a executable from your python script (stand-alone *.exe or *.bin file executables, or binary *.pyd modules that can be imported into other python scripts)
+- Support for Windows, Mac (including .app bundles), and Linux
+- All the features of [Nuitka Python Compiler](https://github.com/Nuitka/Nuitka) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
+
 # Simple to Use
 See [Usage Details](#usage-details) below for more info.
 ## 1) Create a python script
@@ -29,12 +35,6 @@ Use this action as a step in one of your project's CI workflow jobs ([details be
 C:\> hello_world.exe
 hello world!
 ```
-
-## Key Features
-
-- Build an executable binary from your python script (stand-alone binaries or binary modules that can be called by python)
-- Support for Windows, Mac (including .app bundles), and Linux
-- Generally speaking, all the features of [Nuitka](https://github.com/Nuitka/Nuitka)
 
 ## Current Limitations
 
