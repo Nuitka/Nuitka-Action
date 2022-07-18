@@ -4,9 +4,11 @@ This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executab
 
 ## Key Features
 
-- Build a executable from your python script (stand-alone *.exe or *.bin file executables, or binary *.pyd modules that can be imported into other python scripts)
-- Support for Windows, Mac (including .app bundles), and Linux
-- All the features of [Nuitka Python Compiler](https://github.com/Nuitka/Nuitka) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
+- **Build Stand-along Executables** - Build a executable from your python script (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
+- **Build Binary Python Modules** - Build binary *.pyd modules that can be imported into other python scripts
+- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
+- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt5](https://pypi.org/project/PyQt5/), and [PySide2](https://pypi.org/project/PySide2/))
+- **Lots More!** - All the features of [Nuitka Python Compiler](https://nuitka.net) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
 
 # Simple to Use
 See [Usage Details](#usage-details) below for more info.
