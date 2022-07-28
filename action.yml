@@ -1,23 +1,22 @@
 name: Build EXE from Python Script
 
 branding:
-  icon: 'package'  
-  color: 'blue'
+  icon: "package"
+  color: "blue"
 
-description: 'Build a stand-alone exe from a python script using nuitka'
+description: "Build a stand-alone exe from a python script using nuitka"
 
 inputs:
-
   ### Only Required Input ###
   script-name:
     required: true
-    description: 'name or path to python script that is to be built'
+    description: "name or path to python script that is to be built"
 
   ### Nuitka Options ###
   module:
     type: boolean
     default: false
-    description: 'Create an extension module executable instead of a program. Defaults to off.'
+    description: "Create an extension module executable instead of a program. Defaults to off."
   standalone:
     type: boolean
     default: true
@@ -25,11 +24,15 @@ inputs:
   onefile:
     type: boolean
     default: true
-    description: 'On top of standalone mode, enable onefile mode. This means not a folder, but a compressed executable is created and used. Defaults to true.'
+    description: "On top of standalone mode, enable onefile mode. This means not a folder, but a compressed executable is created and used. Defaults to true."
   assume-yes-for-downloads:
     type: boolean
     default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
+
+  ### Plugins to enable. ###
+  enable-plugins:
+    description: a comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc.
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
@@ -37,15 +40,15 @@ inputs:
   include-module:
     description: 'Include a single module. Give as a Python namespace, e.g. "some_package.some_module" and Nuitka will then find it and include it in the binary or extension module it creates, and make it available for import by the code. Default empty.'
   include-plugin-directory:
-    description: 'Include the content of that directory, no matter if it is used by the given main program in a visible form. Overrides all other inclusion options. Can be given multiple times. Default empty.'
+    description: "Include the content of that directory, no matter if it is used by the given main program in a visible form. Overrides all other inclusion options. Can be given multiple times. Default empty."
   include-plugin-files:
-    description: 'Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty.'
+    description: "Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty."
   prefer-source-code:
-    description: 'For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off.'
+    description: "For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off."
 
   ### Output choices ##
   output-dir:
-    description: 'Directory for output builds'
+    description: "Directory for output builds"
     default: build
   output-file:
     description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
@@ -53,7 +56,7 @@ inputs:
 
   # Enable Commercial features of Nuitka using a PAT (access token)
   access-token:
-    description: 'github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo'
+    description: "github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
 
   enable-console:
     type: boolean
@@ -62,7 +65,7 @@ inputs:
   disable-console:
     type: boolean
     default: false
-    description: 'When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false.'
+    description: "When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
 
   # Windows specific controls
   windows-icon-from-ico:
@@ -72,7 +75,7 @@ inputs:
     type: boolean
     default: false
   windows-uac-uiaccess:
-    description: 'Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off.'
+    description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
     type: boolean
     default: false
   windows-company-name:
@@ -91,90 +94,105 @@ inputs:
 
   # macOS specific controls:
   macos-create-app-bundle:
-    description: 'When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false.'
+    description: "When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false."
     type: boolean
     default: false
 
 runs:
   using: "composite"
   steps:
+    - name: Install Dependencies (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $github_action_path = "${{ github.action_path }}"
+        # Fixes: C:\actions-runner\_work\repo\repo\./.github/actions/action-name
+        $github_action_path = $github_action_path -replace "\\\./", "\"
+        $github_action_path = $github_action_path -replace "/", "\"
+        pip install -r "$github_action_path\requirements.txt"
+        if ("${{ inputs.access-token }}" -ne ""){
+          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
+        }
 
-      - name: Install Dependencies (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          $github_action_path = "${{ github.action_path }}"
-          # Fixes: C:\actions-runner\_work\repo\repo\./.github/actions/action-name
-          $github_action_path = $github_action_path -replace "\\\./", "\"
-          $github_action_path = $github_action_path -replace "/", "\"
-          pip install -r "$github_action_path\requirements.txt"
-          if ("${{ inputs.access-token }}" -ne ""){
-            pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
-          }
+    - name: Install Dependencies (macOS and Linux)
+      if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+      shell: bash
+      run: |
+        pip install -r "${{ github.action_path }}/requirements.txt"
+        if [ "${{ inputs.access-token }}" != "" ]; then
+          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
+        fi
 
-      - name: Install Dependencies (macOS and Linux)
-        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
-        shell: bash
-        run: |
-          pip install -r "${{ github.action_path }}/requirements.txt"
-          if [ "${{ inputs.access-token }}" != "" ]; then
-            pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
-          fi
+    - name: Build Executable (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $args = @()
+        if ("${{ inputs.module }}" -ne '${{ false }}'){
+          $args += @('--module')
+        }
+        if (("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
+          $args += @('--standalone')
+        }
+        if (("${{ inputs.onefile }}" -eq '${{ true }}') -and ("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
+          $args += @('--onefile')
+        }
+        if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
+          $args += @('--assume-yes-for-downloads')
+        }
+        if ("${{ inputs.output-dir }}" -ne ''){
+          $args += @('--output-dir="${{ inputs.output-dir }}"')
+        }
+        $plugins = (${{ inputs.enable-plugins }} -split '\s*,\s*')
+        foreach ($plugin in $plugins) {
+          $args += @('--enable-plugin=${plugin}');
+        }
+        if ("${{ inputs.output-file }}" -ne ''){
+          $args += @('-o', '${{ inputs.output-file }}')
+        }
+        if ("${{ inputs.disable-console }}" -eq '${{ true }}'){
+          $args += @('--disable-console')
+        }
+        python -m nuitka $args "${{ inputs.script-name }}"
 
-      - name: Build Executable (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $args = @()
-          if ("${{ inputs.module }}" -ne '${{ false }}'){
-            $args += @('--module')
-          }
-          if (("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
-            $args += @('--standalone')
-          }
-          if (("${{ inputs.onefile }}" -eq '${{ true }}') -and ("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
-            $args += @('--onefile')
-          }
-          if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
-            $args += @('--assume-yes-for-downloads')
-          }
-          if ("${{ inputs.output-dir }}" -ne ''){
-            $args += @('--output-dir="${{ inputs.output-dir }}"')
-          }
-          if ("${{ inputs.output-file }}" -ne ''){
-            $args += @('-o', '${{ inputs.output-file }}')
-          }
-          python -m nuitka $args "${{ inputs.script-name }}"
-
-      - name: Build Executable (macOS and Linux)
-        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
-        shell: bash
-        run: |
-          ARGS=""
-          SPACE=" "
-          if [ "${{ inputs.access-token }}" != "" ]; then
-            pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka"
-          fi
-          if [ "${{ inputs.module }}" != "${{ false }}" ]; then
-            ARGS+=" --module"
-          fi
-          if [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
-            ARGS+=" --standalone"
-          fi
-          if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
-            ARGS+=" --onefile"
-          fi
-          if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
-            ARGS+=" --assume-yes-for-downloads"
-          fi
-          if [ "${{ inputs.output-dir }}" != "" ]; then
-            ARGS+=" --output-dir=${{ inputs.output-dir }}"
-          fi
-          if [ "${{ inputs.output-file }}" != "" ]; then
-            ARGS+=" -o ${{ inputs.output-file }}"
-          fi
-          if [ "${{ inputs.macos-create-app-bundle }}" == "true" ]; then
-            ARGS+=" --macos-create-app-bundle"
-          fi
-          python -m nuitka $ARGS "${{ inputs.script-name }}"
+    - name: Build Executable (macOS and Linux)
+      if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+      shell: bash
+      run: |
+        ARGS=""
+        SPACE=" "
+        if [ "${{ inputs.access-token }}" != "" ]; then
+          pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka"
+        fi
+        if [ "${{ inputs.module }}" != "${{ false }}" ]; then
+          ARGS+=" --module"
+        fi
+        if [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+          ARGS+=" --standalone"
+        fi
+        if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+          ARGS+=" --onefile"
+        fi
+        if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
+          ARGS+=" --assume-yes-for-downloads"
+        fi
+        if [ "${{ inputs.output-dir }}" != "" ]; then
+          ARGS+=" --output-dir=${{ inputs.output-dir }}"
+        fi
+        if [ "${{ inputs.output-file }}" != "" ]; then
+          ARGS+=" -o ${{ inputs.output-file }}"
+        fi
+        if [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
+          ARGS+=" --disable-console"
+        fi
+        if [ "${{ inputs.enable-plugins }}" != "" ]; then
+          for plugin in $(echo ${{ inputs.enable-plugins }} | sed "s/,/ /g")
+          do
+            ARGS+=" --enable-plugin=$plugin"
+          done
+        fi
+        if [ "${{ inputs.macos-create-app-bundle }}" == "true" ]; then
+          ARGS+=" --macos-create-app-bundle"
+        fi
+        python -m nuitka $ARGS "${{ inputs.script-name }}"
