@@ -154,6 +154,9 @@ runs:
         if ("${{ inputs.disable-console }}" -eq '${{ true }}'){
           $args += @('--disable-console')
         }
+        if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
+          $args += @('--windows-icon-from-ico="${{ windows-icon-from-ico }}"')
+        }
         python -m nuitka $args "${{ inputs.script-name }}"
 
     - name: Build Executable (macOS and Linux)
