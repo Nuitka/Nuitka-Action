@@ -31,9 +31,8 @@ inputs:
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
 
   ### Plugins to enable. ###
-  enable-plugin-pyside2:
-    type: boolean
-    default: false
+  enable-plugins:
+    description: a comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc.
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
@@ -145,8 +144,9 @@ runs:
         if ("${{ inputs.output-dir }}" -ne ''){
           $args += @('--output-dir="${{ inputs.output-dir }}"')
         }
-        if ("${{ inputs.enable-plugin-pyside2 }}" -eq '${{ true }}'){
-          $args += @('--enable-plugin=pyside2')
+        $plugins = (${{ inputs.enable-plugins }} -split '\s*,\s*')
+        foreach ($plugin in $plugins) {
+          $args += @('--enable-plugin=${plugin}');
         }
         if ("${{ inputs.output-file }}" -ne ''){
           $args += @('-o', '${{ inputs.output-file }}')
