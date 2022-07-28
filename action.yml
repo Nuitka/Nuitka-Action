@@ -144,7 +144,7 @@ runs:
         if ("${{ inputs.output-dir }}" -ne ''){
           $args += @('--output-dir="${{ inputs.output-dir }}"')
         }
-        $plugins = (${{ inputs.enable-plugins }} -split '\s*,\s*')
+        $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
         foreach ($plugin in $plugins) {
           $args += @('--enable-plugin=${plugin}');
         }
@@ -162,7 +162,7 @@ runs:
       run: |
         ARGS=""
         SPACE=" "
-        if [ "${{ inputs.access-token }}" != "" ]; then
+        if [ "${{ inputs.access-token }}" != "" ]; then 
           pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka"
         fi
         if [ "${{ inputs.module }}" != "${{ false }}" ]; then
