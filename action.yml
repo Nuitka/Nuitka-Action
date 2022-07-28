@@ -146,7 +146,7 @@ runs:
         }
         $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
         foreach ($plugin in $plugins) {
-          $args += @('--enable-plugin=${plugin}');
+          $args += @("--enable-plugin=$plugin");
         }
         if ("${{ inputs.output-file }}" -ne ''){
           $args += @('-o', '${{ inputs.output-file }}')
