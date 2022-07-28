@@ -186,8 +186,11 @@ runs:
         if [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
           ARGS+=" --disable-console"
         fi
-        if [ "${{ inputs.enable-plugin-pyside2 }}" == "${{ true }}" ]; then
-          ARGS+=" --enable-plugin=pyside2"
+        if [ "${{ inputs.enable-plugins }}" != "" ]; then
+          for plugin in $(echo ${{ inputs.enable-plugins }} | sed "s/,/ /g")
+          do
+            ARGS+=" --enable-plugin=$plugin"
+          done
         fi
         if [ "${{ inputs.macos-create-app-bundle }}" == "true" ]; then
           ARGS+=" --macos-create-app-bundle"
