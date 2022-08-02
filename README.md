@@ -7,7 +7,7 @@ This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executab
 - **Build Stand-along Executables** - Build a executable from your python script (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
 - **Build Binary Python Modules** - Build binary *.pyd modules that can be imported into other python scripts
 - **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
-- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide2](https://pypi.org/project/PySide2/))
+- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide6](https://pypi.org/project/PySide6/))
 - **Lots More!** - All the features of [Nuitka Python Compiler](https://nuitka.net) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
 
 # Simple to Use
@@ -27,7 +27,7 @@ hello world!
 Use this action as a step in one of your project's CI workflow jobs ([details below](#usage-details)):
 ```yaml
 # Build python script into a stand-alone exe
-- uses: jimkring/python-script-to-executable@v0.2.0
+- uses: Nuitka/Nuitka-Action@v0.4
   with:
     script-name: hello_world.py
 ```
@@ -78,7 +78,7 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       # Build python script into a stand-alone exe
-      - uses: jimkring/python-script-to-executable@v0.2.0
+      - uses: Nuitka/Nuitka-Action@v0.4
         with:
           script-name: hello_world.py
 
@@ -96,7 +96,7 @@ Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins: tk
 
 ```yaml
 - Name: Qt GUI with Pyside6
-  uses: Nuitka/Nuitka-Action@v0.3.3
+  uses: Nuitka/Nuitka-Action@v0.4
   with:
     script-name: my_qt_gui_app.py
     standalone: true
@@ -105,7 +105,7 @@ Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins: tk
 
 ```yaml
 - Name: Python GUI With Tkinter
-  uses: Nuitka/Nuitka-Action@v0.3.3
+  uses: Nuitka/Nuitka-Action@v0.4
   with:
     script-name: my_tkinter_gui_app.py
     standalone: true
@@ -145,7 +145,7 @@ jobs:
           pip install -r requirements.txt -r requirements-dev.txt
           
       - Name: Build Executable
-        uses: jimkring/python-script-to-exe@v0.2.0
+        uses: Nuitka/Nuitka-Action@v0.4
         with:
           script-name: kasa_cli
           onefile: true
