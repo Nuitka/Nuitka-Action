@@ -4,7 +4,7 @@ branding:
   icon: "package"
   color: "blue"
 
-description: "Build a stand-alone exe from a python script using nuitka on Mac, Linux, or Windows. Even supports GUIs using Qt/Pyside6 and Tkinter"
+description: "Build a stand-alone exe from python scripts using nuitka on Mac/Linux/Windows. Even supports GUIs with Qt/Pyside6 and Tkinter"
 
 inputs:
   ### Only Required Input ###
