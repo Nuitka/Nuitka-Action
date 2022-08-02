@@ -7,7 +7,7 @@ This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executab
 - **Build Stand-along Executables** - Build a executable from your python script (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
 - **Build Binary Python Modules** - Build binary *.pyd modules that can be imported into other python scripts
 - **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
-- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt5](https://pypi.org/project/PyQt5/), and [PySide2](https://pypi.org/project/PySide2/))
+- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide2](https://pypi.org/project/PySide2/))
 - **Lots More!** - All the features of [Nuitka Python Compiler](https://nuitka.net) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
 
 # Simple to Use
@@ -43,6 +43,13 @@ hello world!
 - Not all Nuitka options are currently exposed as input parameters to this action.
 - The version of the Nuitka package (and its dependencies) are currently hard-coded. Eventually, we'll add support for you to specify versions of these packages -- probably just by disabling installing these packages as part of the action so you can do it in your workflow.
 - Not many examples yet that demonstrate how to use this action in practice.
+
+# Some Example Projects
+
+| Project | Example Workflow (YAML) |
+| ---- | ---- |
+| [Node Editor GUI using Qt/Pyside6](https://github.com/jimkring/logic-node-editor) | [![Executable Build](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml/badge.svg)](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml) |
+| [Kasa TP-Link CLI App](https://github.com/jimkring/kasa-cli) | [![Build-All-Platforms](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml/badge.svg)](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml) |
 
 # Usage Details
 
@@ -83,19 +90,26 @@ jobs:
           path: build/hello_world.exe
 ```
 
-## Python and Package Dependencies
+## GUI Builds
 
-This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
+Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins: tk-inter` to ensure that those libraries are included correctly.
 
+```yaml
+- Name: Qt GUI with Pyside6
+  uses: Nuitka/Nuitka-Action@v0.3.3
+  with:
+    script-name: my_qt_gui_app.py
+    standalone: true
+    enable-plugins: pyside6
 ```
-nuitka==0.9.4
-    # via -r requirements.in
-ordered-set==4.1.0
-    # via -r requirements.in
-wheel==0.37.1
-    # via -r requirements.in
-zstandard==0.18.0
-    # via -r requirements.in
+
+```yaml
+- Name: Python GUI With Tkinter
+  uses: Nuitka/Nuitka-Action@v0.3.3
+  with:
+    script-name: my_tkinter_gui_app.py
+    standalone: true
+    enable-plugins: tk-inter
 ```
 
 ## Multi-Platform Builds
@@ -153,6 +167,21 @@ https://github.com/jimkring/kasa-cli/actions/runs/2682890462
 ![image](https://user-images.githubusercontent.com/381432/179555752-021fd3d6-3f33-4f5f-bc44-0461491813fc.png)
 
 You can see that executable binaries were created for Mac, Linux, and Windows.
+
+## Python and Package Dependencies
+
+This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
+
+```
+nuitka==0.9.4
+    # via -r requirements.in
+ordered-set==4.1.0
+    # via -r requirements.in
+wheel==0.37.1
+    # via -r requirements.in
+zstandard==0.18.0
+    # via -r requirements.in
+```
 
 # Additional Documentation
 
