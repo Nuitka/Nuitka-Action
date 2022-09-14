@@ -144,9 +144,11 @@ runs:
         if ("${{ inputs.output-dir }}" -ne ''){
           $args += @('--output-dir="${{ inputs.output-dir }}"')
         }
-        $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
-        foreach ($plugin in $plugins) {
-          $args += @("--enable-plugin=$plugin");
+        if ("${{ inputs.enable-plugins }}" -ne ''){
+          $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
+          foreach ($plugin in $plugins) {
+            $args += @("--enable-plugin=$plugin");
+          }
         }
         if ("${{ inputs.output-file }}" -ne ''){
           $args += @('-o', '${{ inputs.output-file }}')
