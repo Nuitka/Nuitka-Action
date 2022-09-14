@@ -129,9 +129,6 @@ runs:
       run: |
         $ErrorActionPreference = 'Stop'
         $args = @()
-        if ("${{ inputs.module }}" -ne '${{ false }}'){
-          $args += @('--module')
-        }
         if (("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
           $args += @('--standalone')
         }
@@ -159,7 +156,11 @@ runs:
         if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
           $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
         }
-        python -m nuitka $args "${{ inputs.script-name }}"
+        if ("${{ inputs.module }}" -ne '${{ false }}'){
+          python -m nuitka $args --module "${{ inputs.script-name }}"
+        } else {
+          python -m nuitka $args "${{ inputs.script-name }}"
+        }
 
     - name: Build Executable (macOS and Linux)
       if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
