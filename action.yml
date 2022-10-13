@@ -37,6 +37,8 @@ inputs:
   ### Control the inclusion of modules and packages in result. ###
   include-package:
     description: 'Include a whole package. Give as a Python namespace, e.g. "some_package.sub_package" and Nuitka will then find it and include it and all the modules found below that disk location in the binary or extension module it creates, and make it available for import by the code. To avoid unwanted sub packages, e.g. tests you can e.g. do this "--nofollow-import-to=*.tests". Default empty.'
+  include-package-data:
+    description: a comma separated list of package data to include, such as selenium
   include-module:
     description: 'Include a single module. Give as a Python namespace, e.g. "some_package.some_module" and Nuitka will then find it and include it in the binary or extension module it creates, and make it available for import by the code. Default empty.'
   include-plugin-directory:
@@ -147,6 +149,12 @@ runs:
             $args += @("--enable-plugin=$plugin");
           }
         }
+        if ("${{ inputs.include-package-data }}" -ne ''){
+          $data = ("${{ inputs.include-package-data }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--include-package-data=$datum");
+          }
+        }
         if ("${{ inputs.output-file }}" -ne ''){
           $args += @('-o', '${{ inputs.output-file }}')
         }
@@ -196,6 +204,12 @@ runs:
           for plugin in $(echo ${{ inputs.enable-plugins }} | sed "s/,/ /g")
           do
             ARGS+=" --enable-plugin=$plugin"
+          done
+        fi
+        if [ "${{ inputs.include-package-data }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-package-data }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-package-data=$datum"
           done
         fi
         if [ "${{ inputs.macos-create-app-bundle }}" == "true" ]; then
