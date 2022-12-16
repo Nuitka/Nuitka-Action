@@ -115,9 +115,7 @@ runs:
         # Fixes: C:\actions-runner\_work\repo\repo\./.github/actions/action-name
         $github_action_path = $github_action_path -replace "\\\./", "\"
         $github_action_path = $github_action_path -replace "/", "\"
-        } else {
-          pip install nuitka==${{inputs.nuitka-version }} -r "$github_action_path\requirements.txt"
-        }
+        pip install nuitka==${{inputs.nuitka-version }} -r "$github_action_path\requirements.txt"
         if ("${{ inputs.access-token }}" -ne ""){
           pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472@${{inputs.nuitka-version}}#egg=nuitka
         }
