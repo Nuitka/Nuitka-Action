@@ -1,4 +1,3 @@
-Nuitka
 ordered-set # nuitka compile performance helper
 zstandard # for nuitka's onefile compression
 wheel
