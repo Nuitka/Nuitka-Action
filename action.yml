@@ -117,7 +117,7 @@ runs:
         $github_action_path = $github_action_path -replace "/", "\"
         pip install nuitka==${{inputs.nuitka-version }} -r "$github_action_path\requirements.txt"
         if ("${{ inputs.access-token }}" -ne ""){
-          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472@${{inputs.nuitka-version}}#egg=nuitka
+          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka
         }
 
     - name: Install Dependencies (macOS and Linux)
@@ -126,7 +126,7 @@ runs:
       run: |
         pip install nuitka==${{inputs.nuitka-version }} -r "${{ github.action_path }}/requirements.txt"
         if [ "${{ inputs.access-token }}" != "" ]; then
-          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka
+          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka
         fi
 
     - name: Build Executable (Windows)
@@ -181,7 +181,7 @@ runs:
         ARGS=""
         SPACE=" "
         if [ "${{ inputs.access-token }}" != "" ]; then 
-          pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@cfea7b47ca1c237341c4a334d4ff239c7c3fa472#egg=nuitka"
+          pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka"
         fi
         if [ "${{ inputs.module }}" != "${{ false }}" ]; then
           ARGS+=" --module"
