@@ -97,6 +97,11 @@ inputs:
     description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
   windows-onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
+  windows-mingw-build:
+    description: allows/enforces building with MinGW64
+    type: boolean
+    default: false
+    required: false 
 
   # macOS specific controls:
   macos-create-app-bundle:
@@ -167,6 +172,9 @@ runs:
         }
         if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
           $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
+        }
+        if ("${{ inputs.windows-mingw-build }}" -eq '${{ true }}'){
+          $args += @('--mingw64')
         }
         if ("${{ inputs.module }}" -ne '${{ false }}'){
           python -m nuitka $args --module "${{ inputs.script-name }}"
