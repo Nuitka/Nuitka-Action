@@ -33,6 +33,10 @@ inputs:
     type: boolean
     default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
+  show-scons:
+    description: "Dispays the sconsa info during build process"
+    type: boolean
+    default: true
 
   ### Plugins to enable. ###
   enable-plugins:
@@ -176,6 +180,9 @@ runs:
         if ("${{ inputs.windows-mingw-build }}" -eq '${{ true }}'){
           $args += @('--mingw64')
         }
+        if ("${{ inputs.show-scons }}" -eq '${{ true }}'){
+          $args += @('--show-scons')
+        }
         if ("${{ inputs.module }}" -ne '${{ false }}'){
           python -m nuitka $args --module "${{ inputs.script-name }}"
         } else {
@@ -199,6 +206,9 @@ runs:
         fi
         if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
           ARGS+=" --onefile"
+        fi
+        if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; 
+          ARGS+=" --show-scons"
         fi
         if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
           ARGS+=" --assume-yes-for-downloads"
