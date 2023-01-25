@@ -207,7 +207,7 @@ runs:
         if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
           ARGS+=" --onefile"
         fi
-        if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; 
+        if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
         fi
         if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
