@@ -34,7 +34,7 @@ inputs:
     default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
   show-scons:
-    description: "Dispays the sconsa info during build process"
+    description: "Dispays the detailed scons info during build process (useful for debugging purposes)"
     type: boolean
     default: true
 
@@ -102,7 +102,7 @@ inputs:
   windows-onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
   windows-mingw-build:
-    description: allows/enforces building with MinGW64
+    description: "allows/enforces building with MinGW64"
     type: boolean
     default: false
     required: false 
