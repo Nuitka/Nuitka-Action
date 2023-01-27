@@ -8,7 +8,7 @@ description: "Build a stand-alone exe from python scripts using nuitka on Mac/Li
 
 inputs:
   nuitka-version:
-    default: "1.2.7"
+    default: "1.3.8"
     description: "Version of nuitka to use"
 
   ### Only Required Input ###
@@ -33,6 +33,10 @@ inputs:
     type: boolean
     default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
+  show-scons:
+    description: "Dispays the detailed scons info during build process (useful for debugging purposes)"
+    type: boolean
+    default: true
 
   ### Plugins to enable. ###
   enable-plugins:
@@ -97,6 +101,11 @@ inputs:
     description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
   windows-onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
+  mingw64:
+    description: "allows/enforces building with MinGW64"
+    type: boolean
+    default: false
+    required: false 
 
   # macOS specific controls:
   macos-create-app-bundle:
@@ -168,6 +177,12 @@ runs:
         if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
           $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
         }
+        if ("${{ inputs.mingw64 }}" -eq '${{ true }}'){
+          $args += @('--mingw64')
+        }
+        if ("${{ inputs.show-scons }}" -eq '${{ true }}'){
+          $args += @('--show-scons')
+        }
         if ("${{ inputs.module }}" -ne '${{ false }}'){
           python -m nuitka $args --module "${{ inputs.script-name }}"
         } else {
@@ -191,6 +206,9 @@ runs:
         fi
         if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
           ARGS+=" --onefile"
+        fi
+        if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
+          ARGS+=" --show-scons"
         fi
         if [ "${{ inputs.assume-yes-for-downloads }}" == "${{ true }}" ]; then
           ARGS+=" --assume-yes-for-downloads"
