@@ -8,7 +8,7 @@ description: "Build a stand-alone exe from python scripts using nuitka on Mac/Li
 
 inputs:
   nuitka-version:
-    default: "1.3.8"
+    default: "1.4.8"
     description: "Version of nuitka to use"
 
   ### Only Required Input ###
@@ -34,11 +34,11 @@ inputs:
     default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
   show-scons:
-    description: "Dispays the detailed scons info during build process (useful for debugging purposes)"
+    description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
     type: boolean
     default: true
 
-  ### Plugins to enable. ###
+  ### Nuitka Plugins to enable. ###
   enable-plugins:
     description: a comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc.
 
@@ -105,7 +105,7 @@ inputs:
     description: "allows/enforces building with MinGW64"
     type: boolean
     default: false
-    required: false 
+    required: false
 
   # macOS specific controls:
   macos-create-app-bundle:
@@ -195,7 +195,7 @@ runs:
       run: |
         ARGS=""
         SPACE=" "
-        if [ "${{ inputs.access-token }}" != "" ]; then 
+        if [ "${{ inputs.access-token }}" != "" ]; then
           pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka"
         fi
         if [ "${{ inputs.module }}" != "${{ false }}" ]; then
