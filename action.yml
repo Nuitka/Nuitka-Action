@@ -14,7 +14,7 @@ inputs:
   ### Only Required Input ###
   script-name:
     required: true
-    description: "name or path to python script that is to be built"
+    description: "Name or path to python script that is to be built"
 
   ### Nuitka Options ###
   module:
@@ -40,7 +40,7 @@ inputs:
 
   ### Nuitka Plugins to enable. ###
   enable-plugins:
-    description: a comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc.
+    description: "A comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc."
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
@@ -66,7 +66,7 @@ inputs:
 
   # Enable Commercial features of Nuitka using a PAT (access token)
   access-token:
-    description: "github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
+    description: "Github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
 
   enable-console:
     type: boolean
@@ -102,7 +102,7 @@ inputs:
   windows-onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
   mingw64:
-    description: "allows/enforces building with MinGW64"
+    description: "Allows/enforces building with MinGW64"
     type: boolean
     default: false
     required: false
