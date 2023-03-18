@@ -14,7 +14,7 @@ inputs:
   ### Only Required Input ###
   script-name:
     required: true
-    description: "name or path to python script that is to be built"
+    description: "Name or path to python script that is to be built"
 
   ### Nuitka Options ###
   module:
@@ -40,7 +40,7 @@ inputs:
 
   ### Nuitka Plugins to enable. ###
   enable-plugins:
-    description: a comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc.
+    description: "A comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc."
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
@@ -55,6 +55,8 @@ inputs:
     description: "Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty."
   prefer-source-code:
     description: "For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off."
+  user-package-configuration-file:
+    description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
   ### Output choices ##
   output-dir:
@@ -66,7 +68,7 @@ inputs:
 
   # Enable Commercial features of Nuitka using a PAT (access token)
   access-token:
-    description: "github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
+    description: "Github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
 
   enable-console:
     type: boolean
@@ -102,7 +104,7 @@ inputs:
   windows-onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
   mingw64:
-    description: "allows/enforces building with MinGW64"
+    description: "Allows/enforces building with MinGW64"
     type: boolean
     default: false
     required: false
@@ -158,6 +160,12 @@ runs:
           $data = ("${{ inputs.include-package-data }}" -split '\s*,\s*')
           foreach ($datum in $data) {
             $args += @("--include-package-data=$datum");
+          }
+        }
+        if ("${{ inputs.user-package-configuration-file }}" -ne ''){
+          $user_yaml_files = ("${{ inputs.user-package-configuration-file }}" -split '\s*,\s*')
+          foreach ($user_yaml_file in $user_yaml_files) {
+            $args += @("--user-package-configuration-file=$user_yaml_file");
           }
         }
         if ("${{ inputs.output-file }}" -ne ''){
@@ -221,6 +229,12 @@ runs:
           for datum in $(echo ${{ inputs.include-package-data }} | sed "s/,/ /g")
           do
             ARGS+=" --include-package-data=$datum"
+          done
+        fi
+        if [ "${{ inputs.user-package-configuration-file }}" != "" ]; then
+          for user_yaml_file in $(echo ${{ inputs.user-package-configuration-file }} | sed "s/,/ /g")
+          do
+            ARGS+=" --user-package-configuration-file=$user_yaml_file"
           done
         fi
         if [ ${{ runner.os }} == 'macOS' ]; then
