@@ -116,21 +116,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Dependencies (Windows)
-      if: runner.os == 'Windows'
-      shell: powershell
-      run: |
-        $github_action_path = "${{ github.action_path }}"
-        # Fixes: C:\actions-runner\_work\repo\repo\./.github/actions/action-name
-        $github_action_path = $github_action_path -replace "\\\./", "\"
-        $github_action_path = $github_action_path -replace "/", "\"
-        pip install nuitka==${{inputs.nuitka-version }} -r "$github_action_path\requirements.txt"
-        if ("${{ inputs.access-token }}" -ne ""){
-          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka
-        }
-
-    - name: Install Dependencies (macOS and Linux)
-      if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+    - name: Install Dependencies
       shell: bash
       run: |
         pip install nuitka==${{inputs.nuitka-version }} -r "${{ github.action_path }}/requirements.txt"
