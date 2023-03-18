@@ -223,7 +223,9 @@ runs:
             ARGS+=" --include-package-data=$datum"
           done
         fi
-        if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
-          ARGS+=" --macos-create-app-bundle"
+        if [ ${{ runner.os }} == 'macOS' ]; then
+          if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
+            ARGS+=" --macos-create-app-bundle"
+          fi
         fi
         python -m nuitka $ARGS "${{ inputs.script-name }}"
