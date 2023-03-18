@@ -8,7 +8,7 @@ description: "Build a stand-alone exe from python scripts using nuitka on Mac/Li
 
 inputs:
   nuitka-version:
-    default: "1.4.8"
+    default: "main"
     description: "Version of nuitka to use"
 
   ### Only Required Input ###
