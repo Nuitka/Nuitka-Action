@@ -119,10 +119,16 @@ runs:
     - name: Install Dependencies
       shell: bash
       run: |
-        pip install nuitka==${{inputs.nuitka-version }} -r "${{ github.action_path }}/requirements.txt"
+        pip install -r "${{ github.action_path }}/requirements.txt"
+
+        # With commercial access token, use that repository.
         if [ "${{ inputs.access-token }}" != "" ]; then
-          pip install -e git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka
+          repo_url="git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git"
+        else
+          repo_url="git+https://$@github.com/Nuitka/Nuitka.git"
         fi
+
+        pip install "${repo_url}/@${{inputs.nuitka-version }}#egg=nuitka"
 
     - name: Build Executable (Windows)
       if: runner.os == 'Windows'
@@ -181,9 +187,6 @@ runs:
       run: |
         ARGS=""
         SPACE=" "
-        if [ "${{ inputs.access-token }}" != "" ]; then
-          pip install -e "git+https://${{ inputs.access-token }}@github.com/Nuitka/Nuitka-commercial.git@nuitka-main-2022-12-14#egg=nuitka"
-        fi
         if [ "${{ inputs.module }}" != "${{ false }}" ]; then
           ARGS+=" --module"
         fi
