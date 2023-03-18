@@ -1,13 +1,18 @@
 # Python-Script-to-Executable
 
-This is a GitHub Action that builds stand-alone Windows, Mac, and Linux executable binaries from a python script using the amazing [nuitka](https://github.com/Nuitka/Nuitka) python compiler.
+This is a GitHub Action that builds stand-alone Windows, Mac, and Linux
+executable binaries from a python script using the amazing
+[nuitka](https://github.com/Nuitka/Nuitka) python compiler.
 
 ## Key Features
 
-- **Build Stand-along Executables** - Build a executable from your python script (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
-- **Build Binary Python Modules** - Build binary *.pyd modules that can be imported into other python scripts
-- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
-- **GUI Support** - Supports GUIs made with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide6](https://pypi.org/project/PySide6/))
+- **Build Stand-along Executables** - Build a executable from your python script
+  (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
+- **Build Binary Python Modules** - Build binary *.pyd modules that can be
+  imported into other python scripts
+- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app
+  bundles), and Linux
+- **GUI Support** - Supports GUIs made e.g. with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide6](https://pypi.org/project/PySide6/))
 - **Lots More!** - All the features of [Nuitka Python Compiler](https://nuitka.net) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
 
 # Simple to Use
@@ -27,12 +32,13 @@ hello world!
 Use this action as a step in one of your project's CI workflow jobs ([details below](#usage-details)):
 ```yaml
 # Build python script into a stand-alone exe
-- uses: Nuitka/Nuitka-Action@v0.4
+- uses: Nuitka/Nuitka-Action@main
   with:
+    nuitka-version: main
     script-name: hello_world.py
 ```
 
-## 3) Run the exectuable
+## 3) Run the executable
 ```
 C:\> hello_world.exe
 hello world!
@@ -40,8 +46,11 @@ hello world!
 
 ## Current Limitations
 
-- Not all Nuitka options are currently exposed as input parameters to this action.
+- Not all Nuitka options are currently exposed as input parameters to this
+  action. We welcome PRs in case you find anything missing.
+
 - The version of the Nuitka package (and its dependencies) are currently hard-coded. Eventually, we'll add support for you to specify versions of these packages -- probably just by disabling installing these packages as part of the action so you can do it in your workflow.
+
 - Not many examples yet that demonstrate how to use this action in practice.
 
 # Some Example Projects
@@ -53,7 +62,8 @@ hello world!
 
 # Usage Details
 
-See [action.yml](action.yml) for details on how this action works under the hood.
+See [action.yml](action.yml) for details on how this action works under the
+hood. It is actually pretty simple.
 
 ## Build a python script into an exe
 
@@ -67,7 +77,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    
+
       # Check-out repository
       - uses: actions/checkout@v3
 
@@ -78,9 +88,11 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       # Build python script into a stand-alone exe
-      - uses: Nuitka/Nuitka-Action@v0.4
+      - uses: Nuitka/Nuitka-Action@main
         with:
+          nuitka-version: main
           script-name: hello_world.py
+          onefile: true
 
       # Uploads artifact
       - name: Upload Artifact
@@ -92,12 +104,14 @@ jobs:
 
 ## GUI Builds
 
-Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins: tk-inter` to ensure that those libraries are included correctly.
+Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-inter` to
+ensure that those libraries are included correctly.
 
 ```yaml
 - Name: Qt GUI with Pyside6
-  uses: Nuitka/Nuitka-Action@v0.4
+  uses: Nuitka/Nuitka-Action@main
   with:
+    nuitka-version: main
     script-name: my_qt_gui_app.py
     standalone: true
     enable-plugins: pyside6
@@ -105,8 +119,9 @@ Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins: tk
 
 ```yaml
 - Name: Python GUI With Tkinter
-  uses: Nuitka/Nuitka-Action@v0.4
+  uses: Nuitka/Nuitka-Action@main
   with:
+    nuitka-version: main
     script-name: my_tkinter_gui_app.py
     standalone: true
     enable-plugins: tk-inter
@@ -124,9 +139,9 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-      
+
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - name: Check-out repository
         uses: actions/checkout@v3
@@ -139,17 +154,18 @@ jobs:
           cache: 'pip'
           cache-dependency-path: |
             **/requirements*.txt
-            
+
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt -r requirements-dev.txt
-          
+
       - Name: Build Executable
-        uses: Nuitka/Nuitka-Action@v0.4
+        uses: Nuitka/Nuitka-Action@main
         with:
+          nuitka-version: main
           script-name: kasa_cli
           onefile: true
-  
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -196,7 +212,7 @@ Nuitka is licensed under the [Apache 2.0 License](https://github.com/Nuitka/Nuit
 
 Python is licensed under the [Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
 
-## You are Reponsible for Complying with your Project's Dependencies' Licenses 
+## You are Reponsible for Complying with your Project's Dependencies' Licenses
 
 This tool compiles and/or copies your project's package dependencies (and their dependencies) into the output executable, which will be considered a combined and/or derivative work of those packages.
 
