@@ -143,7 +143,7 @@ runs:
         if (("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
           $args += @('--standalone')
         }
-        if (("${{ inputs.onefile }}" -eq '${{ true }}') -and ("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
+        if (("${{ inputs.onefile }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
           $args += @('--onefile')
         }
         if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
