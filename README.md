@@ -189,14 +189,11 @@ You can see that executable binaries were created for Mac, Linux, and Windows.
 This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
 
 ```
-nuitka==0.9.4
-    # via -r requirements.in
 ordered-set==4.1.0
     # via -r requirements.in
-wheel==0.37.1
+wheel==0.38.4
     # via -r requirements.in
-zstandard==0.18.0
-    # via -r requirements.in
+zstandard==0.20.0
 ```
 
 # Additional Documentation
