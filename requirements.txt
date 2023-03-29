@@ -6,7 +6,7 @@
 #
 ordered-set==4.1.0
     # via -r requirements.in
-wheel==0.37.1
+wheel==0.38.4
     # via -r requirements.in
-zstandard==0.18.0
+zstandard==0.20.0
     # via -r requirements.in
