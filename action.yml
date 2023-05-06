@@ -116,7 +116,23 @@ inputs:
     description: "When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false."
     type: boolean
     default: false
-
+  macos-app-icon:
+    description: "Add icon for the application bundle to use. Can be given only one time. Defaults to Python icon if available."
+  macos-target-arch:
+    description: "options ('universal, 'arm64', 'x86_64') Default and limit is what the running Python allows for. Default is 'native' which is the architecture the Python is run with."
+  macos-signed-app-name:
+    description: "Name of the application to use for macOS signing. Follow 'com.YourCompany.AppName' naming results for best results, as these have to be globally unique, and will potentially grant protected API accesses."
+  macos-app-mode:
+    description: "options ('gui', 'background', 'ui-element') Mode of application for the application bundle. When launching a Window, and appearing in Docker is desired, default value 'gui' is a good fit. Without a Window ever, the application is a 'background' application. For UI elements that get to display later, 'ui-element' is in-between. The application will not appear in dock, but get full access to desktop when it does open a Window later"
+  macos-sign-identity:
+    description: "When signing on macOS, by default an ad-hoc identify will be used, but with this option your get to specify another identity to use. The signing of code is now mandatory on macOS and cannot be disabled. Default 'ad-hoc' if not given."
+  macos-sign-notarization:
+    description: "When signing for notarization, using a proper TeamID identity from Apple, use the required runtime signing option, such that it can be accepted."
+  macos-app-version:
+    description: "Product version to use in macOS bundle information. Defaults to '1.0' if not given."
+  macos-app-protected-resource:
+    description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
+    
 runs:
   using: "composite"
   steps:
@@ -254,6 +270,30 @@ runs:
         if [ ${{ runner.os }} == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
             ARGS+=" --macos-create-app-bundle"
+          fi
+          if [ "${{ inputs.macos-app-icon }}" != "" ]; then
+            ARGS+=" --macos-app-icon=${{ inputs.macos-app-icon }}"
+          fi
+          if [ "${{ macos-target-arch }}" != "" ]; then
+            ARGS+=" --macos-target-arch=${{ inputs.macos-target-arch }}"
+          fi
+          if [ "${{ macos-signed-app-name }}" != "" ]; then
+            ARGS+=" --macos-signed-app-name=${{ inputs.macos-signed-app-name }}"
+          fi
+          if [ "${{ macos-app-mode }}" != "" ]; then
+            ARGS+=" --macos-app-mode=${{ inputs.macos-app-mode }}"
+          fi
+          if [ "${{ macos-sign-identity }}" != "" ]; then
+            ARGS+=" --macos-sign-identity=${{ inputs.macos-sign-identity }}"
+          fi
+          if [ "${{ macos-sign-notarization }}" != "" ]; then
+            ARGS+=" --macos-sign-notarization=${{ inputs.macos-sign-notarization }}"
+          fi
+          if [ "${{ macos-app-version }}" != "" ]; then
+            ARGS+=" --macos-app-version=${{ inputs.macos-app-version }}"
+          fi
+          if [ "${{ macos-app-protected-resource }}" != "" ]; then
+            ARGS+=" --macos-app-protected-resource=${{ inputs.macos-app-protected-resource }}"
           fi
         fi
         python -m nuitka $ARGS "${{ inputs.script-name }}"
