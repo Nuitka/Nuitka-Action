@@ -274,25 +274,25 @@ runs:
           if [ "${{ inputs.macos-app-icon }}" != "" ]; then
             ARGS+=" --macos-app-icon=${{ inputs.macos-app-icon }}"
           fi
-          if [ "${{ macos-target-arch }}" != "" ]; then
+          if [ "${{ inputs.macos-target-arch }}" != "" ]; then
             ARGS+=" --macos-target-arch=${{ inputs.macos-target-arch }}"
           fi
-          if [ "${{ macos-signed-app-name }}" != "" ]; then
+          if [ "${{ inputs.macos-signed-app-name }}" != "" ]; then
             ARGS+=" --macos-signed-app-name=${{ inputs.macos-signed-app-name }}"
           fi
-          if [ "${{ macos-app-mode }}" != "" ]; then
+          if [ "${{ inputs.macos-app-mode }}" != "" ]; then
             ARGS+=" --macos-app-mode=${{ inputs.macos-app-mode }}"
           fi
-          if [ "${{ macos-sign-identity }}" != "" ]; then
+          if [ "${{ imputs.macos-sign-identity }}" != "" ]; then
             ARGS+=" --macos-sign-identity=${{ inputs.macos-sign-identity }}"
           fi
-          if [ "${{ macos-sign-notarization }}" != "" ]; then
+          if [ "${{ inputs.macos-sign-notarization }}" != "" ]; then
             ARGS+=" --macos-sign-notarization=${{ inputs.macos-sign-notarization }}"
           fi
-          if [ "${{ macos-app-version }}" != "" ]; then
+          if [ "${{ inputs.macos-app-version }}" != "" ]; then
             ARGS+=" --macos-app-version=${{ inputs.macos-app-version }}"
           fi
-          if [ "${{ macos-app-protected-resource }}" != "" ]; then
+          if [ "${{ inputs.macos-app-protected-resource }}" != "" ]; then
             ARGS+=" --macos-app-protected-resource=${{ inputs.macos-app-protected-resource }}"
           fi
         fi
