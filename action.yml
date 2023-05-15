@@ -283,7 +283,7 @@ runs:
           if [ "${{ inputs.macos-app-mode }}" != "" ]; then
             ARGS+=" --macos-app-mode=${{ inputs.macos-app-mode }}"
           fi
-          if [ "${{ imputs.macos-sign-identity }}" != "" ]; then
+          if [ "${{ inputs.macos-sign-identity }}" != "" ]; then
             ARGS+=" --macos-sign-identity=${{ inputs.macos-sign-identity }}"
           fi
           if [ "${{ inputs.macos-sign-notarization }}" != "" ]; then
