@@ -183,8 +183,8 @@ runs:
           }
         }
         if ("${{ inputs.include-data-files }}" -ne ''){
-          $data = ("${{ inputs.inputs.include-data-files }}" -split '\s*,\s*')
-          $args += @("--inputs.include-data-files=");
+          $data = ("${{ inputs.include-data-files }}" -split '\s*,\s*')
+          $args += @("--include-data-files=");
           foreach ($datum in $data) {
             $args += @("$datum=");
           }
