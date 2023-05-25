@@ -45,6 +45,8 @@ inputs:
   ### Control the inclusion of modules and packages in result. ###
   include-data-dir:
     description: 'Include data files from complete directory in the distribution. This is recursive. Check "--include-data-files" with patterns if you want non-recursive inclusion. An example would be "--include-data-dir=/path/some_dir=data/some_dir" for plain copy, of the whole directory. All files are copied, if you want to exclude files you need to remove them beforehand, or use "--noinclude-data-files" option to remove them. Default empty.'
+  include-data-files:
+    description: 'Include data files by filenames in the distribution. There are many allowed forms. With '--include-data-files=/path/to/file/*.txt=folder_name/some.txt' it will copy a single file and complain if it's multiple. With '--include-data-files=/path/to/files/*.txt=folder_name/' it will put all matching files into that folder. For recursive copy there is a form with 3 values that '--include-data-files=/path/to/scan=folder_name=**/*.txt' that will preserve directory structure. Default empty.'
   include-package:
     description: 'Include a whole package. Give as a Python namespace, e.g. "some_package.sub_package" and Nuitka will then find it and include it and all the modules found below that disk location in the binary or extension module it creates, and make it available for import by the code. To avoid unwanted sub packages, e.g. tests you can e.g. do this "--nofollow-import-to=*.tests". Default empty.'
   include-package-data:
@@ -180,6 +182,12 @@ runs:
             $args += @("--include-data-dir=$datum");
           }
         }
+        if ("${{ inputs.include-data-files }}" -ne ''){
+          $data = ("${{ inputs.inputs.include-data-files }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--inputs.include-data-files=$datum");
+          }
+        }
         if ("${{ inputs.include-package-data }}" -ne ''){
           $data = ("${{ inputs.include-package-data }}" -split '\s*,\s*')
           foreach ($datum in $data) {
@@ -253,6 +261,12 @@ runs:
           for datum in $(echo ${{ inputs.include-data-dir }} | sed "s/,/ /g")
           do
             ARGS+=" --include-data-dir=$datum"
+          done
+        fi
+        if [ "${{ inputs.include-data-files }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-data-files }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-data-files=$datum"
           done
         fi
         if [ "${{ inputs.include-package-data }}" != "" ]; then
