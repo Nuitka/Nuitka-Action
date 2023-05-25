@@ -184,8 +184,9 @@ runs:
         }
         if ("${{ inputs.include-data-files }}" -ne ''){
           $data = ("${{ inputs.inputs.include-data-files }}" -split '\s*,\s*')
+          $args += @("--inputs.include-data-files=");
           foreach ($datum in $data) {
-            $args += @("--inputs.include-data-files=$datum");
+            $args += @("$datum=");
           }
         }
         if ("${{ inputs.include-package-data }}" -ne ''){
@@ -264,9 +265,10 @@ runs:
           done
         fi
         if [ "${{ inputs.include-data-files }}" != "" ]; then
+          ARGS+=" --include-data-files="
           for datum in $(echo ${{ inputs.include-data-files }} | sed "s/,/ /g")
           do
-            ARGS+=" --include-data-files=$datum"
+            ARGS+="$datum="
           done
         fi
         if [ "${{ inputs.include-package-data }}" != "" ]; then
