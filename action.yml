@@ -132,7 +132,7 @@ inputs:
     description: "Product version to use in macOS bundle information. Defaults to '1.0' if not given."
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
-    
+
 runs:
   using: "composite"
   steps:
@@ -172,6 +172,18 @@ runs:
           $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
           foreach ($plugin in $plugins) {
             $args += @("--enable-plugin=$plugin");
+          }
+        }
+        if ("${{ inputs.include-package }}" -ne ''){
+          $data = ("${{ inputs.include-package }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--include-package=$datum");
+          }
+        }
+        if ("${{ inputs.include-module }}" -ne ''){
+          $data = ("${{ inputs.include-module }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--include-module=$datum");
           }
         }
         if ("${{ inputs.include-data-dir }}" -ne ''){
@@ -247,6 +259,18 @@ runs:
           for plugin in $(echo ${{ inputs.enable-plugins }} | sed "s/,/ /g")
           do
             ARGS+=" --enable-plugin=$plugin"
+          done
+        fi
+        if [ "${{ inputs.include-package }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-package }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-package=$datum"
+          done
+        fi
+        if [ "${{ inputs.include-module }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-module }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-module=$datum"
           done
         fi
         if [ "${{ inputs.include-data-dir }}" != "" ]; then
