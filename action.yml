@@ -59,6 +59,8 @@ inputs:
     description: "Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty."
   prefer-source-code:
     description: "For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off."
+  nofollow-import-to:
+    description: "Do not follow to that module name even if used, or if a package name, to the whole package in any case, overrides all other options. Can be given multiple times. Default empty."
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
@@ -134,7 +136,7 @@ inputs:
     description: "Product version to use in macOS bundle information. Defaults to '1.0' if not given."
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
-    
+
 runs:
   using: "composite"
   steps:
@@ -176,6 +178,18 @@ runs:
             $args += @("--enable-plugin=$plugin");
           }
         }
+        if ("${{ inputs.include-package }}" -ne ''){
+          $data = ("${{ inputs.include-package }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--include-package=$datum");
+          }
+        }
+        if ("${{ inputs.include-module }}" -ne ''){
+          $data = ("${{ inputs.include-module }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--include-module=$datum");
+          }
+        }
         if ("${{ inputs.include-data-dir }}" -ne ''){
           $data = ("${{ inputs.include-data-dir }}" -split '\s*,\s*')
           foreach ($datum in $data) {
@@ -192,6 +206,12 @@ runs:
           $data = ("${{ inputs.include-package-data }}" -split '\s*,\s*')
           foreach ($datum in $data) {
             $args += @("--include-package-data=$datum");
+          }
+        }
+        if ("${{ inputs.nofollow-import-to }}" -ne ''){
+          $data = ("${{ inputs.nofollow-import-to }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--nofollow-import-to=$datum");
           }
         }
         if ("${{ inputs.user-package-configuration-file }}" -ne ''){
@@ -257,6 +277,18 @@ runs:
             ARGS+=" --enable-plugin=$plugin"
           done
         fi
+        if [ "${{ inputs.include-package }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-package }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-package=$datum"
+          done
+        fi
+        if [ "${{ inputs.include-module }}" != "" ]; then
+          for datum in $(echo ${{ inputs.include-module }} | sed "s/,/ /g")
+          do
+            ARGS+=" --include-module=$datum"
+          done
+        fi
         if [ "${{ inputs.include-data-dir }}" != "" ]; then
           for datum in $(echo ${{ inputs.include-data-dir }} | sed "s/,/ /g")
           do
@@ -273,6 +305,12 @@ runs:
           for datum in $(echo ${{ inputs.include-package-data }} | sed "s/,/ /g")
           do
             ARGS+=" --include-package-data=$datum"
+          done
+        fi
+        if [ "${{ inputs.nofollow-import-to }}" != "" ]; then
+          for datum in $(echo ${{ inputs.nofollow-import-to }} | sed "s/,/ /g")
+          do
+            ARGS+=" --nofollow-import-to=$datum"
           done
         fi
         if [ "${{ inputs.user-package-configuration-file }}" != "" ]; then
