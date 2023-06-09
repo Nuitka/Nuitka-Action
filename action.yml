@@ -161,7 +161,6 @@ runs:
       shell: bash
       run: |
         sudo apt-get install -y ccache
-        export PATH="/usr/lib/ccache:$PATH"
     - name: Cache Nuitka cache directory
       uses: actions/cache@v3
       with:
