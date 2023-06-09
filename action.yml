@@ -141,9 +141,19 @@ inputs:
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
 
+  # action controls:
+  disable-cache:
+    description: "Disables caching of compiled binaries. Defaults to false."
+
 runs:
   using: "composite"
   steps:
+    - name: Setup Environment Variables
+      if: ${{ !inputs.disable-cache }}
+      shell: bash
+      run: |
+        echo "NUITKA_CACHE_DIR=${{ github.action_path }}/nuitka/cache" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)" >> $GITHUB_ENV
     - name: Install Dependencies
       shell: bash
       run: |
@@ -157,6 +167,21 @@ runs:
         fi
 
         pip install "${repo_url}/@${{inputs.nuitka-version }}#egg=nuitka"
+    - name: Install ccache
+      if: ${{ inputs.disable-cache != 'ccache' && runner.os == 'Linux' }}
+      shell: bash
+      run: |
+        sudo apt-get install -y ccache
+    - name: Cache Nuitka cache directory
+      if: ${{ !inputs.disable-cache }}
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.NUITKA_CACHE_DIR }}
+        key: ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-
+          ${{ runner.os }}-python-
+          ${{ runner.os }}-
 
     - name: Build Executable (Windows)
       if: runner.os == 'Windows'
@@ -244,6 +269,9 @@ runs:
         }
         if ("${{ inputs.show-scons }}" -eq '${{ true }}'){
           $args += @('--show-scons')
+        }
+        if ("${{ inputs.disable-cache }}" -eq '${{ true }}'){
+          $args += @('--disable-cache=${{ inputs.disable-cache }}')
         }
         if ("${{ inputs.module }}" -ne '${{ false }}'){
           python -m nuitka $args --module "${{ inputs.script-name }}"
@@ -334,6 +362,9 @@ runs:
           do
             ARGS+=" --user-package-configuration-file=$user_yaml_file"
           done
+        fi
+        if [ "${{ inputs.disable-cache }}" != "" ]; then
+          ARGS+=" --disable-cache=${{ inputs.disable-cache }}"
         fi
         if [ ${{ runner.os }} == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
