@@ -63,6 +63,8 @@ inputs:
     description: "Include into files matching the PATTERN. Overrides all other follow options. Can be given multiple times. Default empty."
   prefer-source-code:
     description: "For already compiled extension modules, where there is both a source file and an extension module, normally the extension module is used, but it should be better to compile the module from available source code for best performance. If not desired, there is --no- prefer-source-code to disable warnings about it. Default off."
+  nofollow-import-to:
+    description: "Do not follow to that module name even if used, or if a package name, to the whole package in any case, overrides all other options. Can be given multiple times. Default empty."
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
@@ -216,6 +218,12 @@ runs:
             $args += @("--include-package-data=$datum");
           }
         }
+        if ("${{ inputs.nofollow-import-to }}" -ne ''){
+          $data = ("${{ inputs.nofollow-import-to }}" -split '\s*,\s*')
+          foreach ($datum in $data) {
+            $args += @("--nofollow-import-to=$datum");
+          }
+        }
         if ("${{ inputs.user-package-configuration-file }}" -ne ''){
           $user_yaml_files = ("${{ inputs.user-package-configuration-file }}" -split '\s*,\s*')
           foreach ($user_yaml_file in $user_yaml_files) {
@@ -313,6 +321,12 @@ runs:
           for datum in $(echo ${{ inputs.include-package-data }} | sed "s/,/ /g")
           do
             ARGS+=" --include-package-data=$datum"
+          done
+        fi
+        if [ "${{ inputs.nofollow-import-to }}" != "" ]; then
+          for datum in $(echo ${{ inputs.nofollow-import-to }} | sed "s/,/ /g")
+          do
+            ARGS+=" --nofollow-import-to=$datum"
           done
         fi
         if [ "${{ inputs.user-package-configuration-file }}" != "" ]; then
