@@ -135,10 +135,17 @@ inputs:
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
 
+  # action controls:
+  disable-cache:
+    description: "Disables caching of compiled binaries. Defaults to false."
+    type: boolean
+    default: false
+
 runs:
   using: "composite"
   steps:
     - name: Setup Environment Variables
+      if: ${{ !inputs.disable-cache }}
       shell: bash
       run: |
         echo "NUITKA_CACHE_DIR=${{ github.action_path }}/nuitka/cache" >> $GITHUB_ENV
@@ -157,11 +164,12 @@ runs:
 
         pip install "${repo_url}/@${{inputs.nuitka-version }}#egg=nuitka"
     - name: Install ccache
-      if: runner.os == 'Linux'
+      if: ${{ !inputs.disable-cache && runner.os == 'Linux' }}
       shell: bash
       run: |
         sudo apt-get install -y ccache
     - name: Cache Nuitka cache directory
+      if: ${{ !inputs.disable-cache }}
       uses: actions/cache@v3
       with:
         path: ${{ env.NUITKA_CACHE_DIR }}
@@ -246,6 +254,9 @@ runs:
         if ("${{ inputs.show-scons }}" -eq '${{ true }}'){
           $args += @('--show-scons')
         }
+        if ("${{ inputs.disable-cache }}" -eq '${{ true }}'){
+          $args += @('--disable-cache=ccache')
+        }
         if ("${{ inputs.module }}" -ne '${{ false }}'){
           python -m nuitka $args --module "${{ inputs.script-name }}"
         } else {
@@ -323,6 +334,9 @@ runs:
           do
             ARGS+=" --user-package-configuration-file=$user_yaml_file"
           done
+        fi
+        if [ "${{ inputs.disable-cache }}" == "${{ true }}" ]; then
+          ARGS+=" --disable-cache=ccache"
         fi
         if [ ${{ runner.os }} == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
