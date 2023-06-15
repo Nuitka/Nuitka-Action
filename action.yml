@@ -282,6 +282,8 @@ runs:
         } else {
           python -m nuitka $args "${{ inputs.script-name }}"
         }
+      working-directory: ${{ inputs.working-directory }}
+
 
     - name: Build Executable (macOS and Linux)
       if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
