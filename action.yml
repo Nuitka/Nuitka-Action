@@ -7,6 +7,10 @@ branding:
 description: "Build a stand-alone exe from python scripts using nuitka on Mac/Linux/Windows. Even supports GUIs with Qt/Pyside6 and Tkinter"
 
 inputs:
+  working-directory:
+    default: "."
+    description: "Directory to run nuitka"
+
   nuitka-version:
     default: "main"
     description: "Version of nuitka to use"
@@ -278,6 +282,8 @@ runs:
         } else {
           python -m nuitka $args "${{ inputs.script-name }}"
         }
+      working-directory: ${{ inputs.working-directory }}
+
 
     - name: Build Executable (macOS and Linux)
       if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
@@ -396,3 +402,4 @@ runs:
           fi
         fi
         python -m nuitka $ARGS "${{ inputs.script-name }}"
+      working-directory: ${{ inputs.working-directory }}
