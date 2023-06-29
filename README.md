@@ -108,7 +108,7 @@ Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-
 ensure that those libraries are included correctly.
 
 ```yaml
-- Name: Qt GUI with Pyside6
+- name: Qt GUI with Pyside6
   uses: Nuitka/Nuitka-Action@main
   with:
     nuitka-version: main
@@ -118,7 +118,7 @@ ensure that those libraries are included correctly.
 ```
 
 ```yaml
-- Name: Python GUI With Tkinter
+- name: Python GUI With Tkinter
   uses: Nuitka/Nuitka-Action@main
   with:
     nuitka-version: main
@@ -159,7 +159,7 @@ jobs:
         run: |
           pip install -r requirements.txt -r requirements-dev.txt
 
-      - Name: Build Executable
+      - name: Build Executable
         uses: Nuitka/Nuitka-Action@main
         with:
           nuitka-version: main
