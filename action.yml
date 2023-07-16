@@ -373,7 +373,7 @@ runs:
           ARGS+=" --disable-cache=${{ inputs.disable-cache }}"
         fi
         if [ ${{ runner.os }} == 'macOS' ]; then
-          if [ "${{ inputs.macos-create-app-bundle }}" == "true" || "${{ inputs.disable-console }}" == "${{ true }}" ]; then
+          if [ "${{ inputs.macos-create-app-bundle }}" == "true" ] || [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
             ARGS+=" --macos-create-app-bundle"
           fi
           if [ "${{ inputs.macos-app-icon }}" != "" ]; then
