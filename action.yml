@@ -154,6 +154,16 @@ inputs:
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
 
+  # data file embedding (commercial only)
+  embed-data-files-compile-time-pattern:
+    description: Pattern of data files to embed for use during compile time. These should match target filenames.
+  embed-data-files-run-time-pattern:
+    description: Pattern of data files to embed for use during run time. These should match target filenames.
+  embed-data-files-qt-resource-pattern:
+    description: Pattern of data files to embed for use with Qt at run time. These should match target filenames.
+  embed-debug-qt-resources:
+    description: For debugging purposes, print out information for Qt resources not found.
+
   # action controls:
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
@@ -308,6 +318,22 @@ runs:
         if [ "${{ inputs.trademark }}" != "" ]; then
           ARGS+=" --trademark=${{ inputs.trademark }}"
         fi
+
+        # Commercial debugging features.
+        if [ "${{ inputs.embed-data-files-compile-time-pattern }}" != "" then
+          ARGS+=" --embed-data-files-compile-time-pattern=${{ inputs.embed-data-files-compile-time-pattern }}"
+        fi
+        if [ "${{ inputs.embed-data-files-run-time-pattern }}" != "" then
+          ARGS+=" --embed-data-files-run-time-pattern=${{ inputs.embed-data-files-run-time-pattern }}"
+        fi
+        if [ "${{ inputs.embed-data-files-qt-resource-pattern }}" != "" then
+          ARGS+=" --embed-data-files-qt-resource-pattern=${{ inputs.embed-data-files-qt-resource-pattern }}"
+        fi
+        if [ "${{ inputs.embed-debug-qt-resources }}" == "${{ true }}" ]; then
+          ARGS+=" --embed-debug-qt-resources"
+        fi
+
+        # Windows only features.
         if [ ${{ runner.os }} == 'Windows' ]; then
           if ("${{ inputs.mingw64 }}" -eq '${{ true }}'){
             $args += @('--mingw64')
@@ -316,6 +342,8 @@ runs:
             $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
           }
         fi
+
+        # macOS only features
         if [ ${{ runner.os }} == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" ] || [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
             ARGS+=" --macos-create-app-bundle"
@@ -345,5 +373,11 @@ runs:
             ARGS+=" --macos-app-protected-resource=${{ inputs.macos-app-protected-resource }}"
           fi
         fi
+
+        # Linux only features
+        if [ ${{ runner.os }} == 'Linux' ]; then
+
+        fi
+
         python -m nuitka $ARGS "${{ inputs.script-name }}"
       working-directory: ${{ inputs.working-directory }}
