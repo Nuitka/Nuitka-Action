@@ -78,6 +78,16 @@ inputs:
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
+  # Onefile behaviour details
+  onefile-tempdir-spec:
+    description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."
+  onefile-child-grace-time:
+    description: "When stopping the child, e.g. due to CTRL-C or shutdown, how much time to allow before killing it the hard way. Unit is ms. Default 5000."
+  onefile-no-compression:
+    description: "When creating the onefile, disable compression of the payload. Default is false."
+    type: boolean
+    default: false
+
   ### Output choices ##
   output-dir:
     description: "Directory for output builds"
@@ -124,8 +134,6 @@ inputs:
     description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
     type: boolean
     default: false
-  onefile-tempdir-spec:
-    description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."
   mingw64:
     description: "Allows/enforces building with MinGW64 on Windows"
     type: boolean
@@ -223,7 +231,13 @@ runs:
           ARGS+=" --onefile"
         fi
         if [ "${{ inputs.onefile-tempdir-spec }}" == "${{ true }}" ]; then
-          ARGS+=" --onefile-tempdir-spec=${{ inputs.onefile-tempdir-spec"
+          ARGS+=" --onefile-tempdir-spec=${{ inputs.onefile-tempdir-spec }}"
+        fi
+        if [ "${{ inputs.onefile-child-grace-time }}" != "" ]; then
+          ARGS+=" --onefile-child-grace-time=${{ inputs.onefile-child-grace-time }}"
+        fi
+        if [ "${{ inputs.onefile-no-compression }}" == "${{ true }}" ]; then
+          ARGS+=" --onefile-no-compression"
         fi
         if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
