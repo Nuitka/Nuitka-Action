@@ -1,10 +1,10 @@
-name: Build EXE from Python Script
+name: Build executables or extension modules from Python projects
 
 branding:
   icon: "package"
   color: "blue"
 
-description: "Build a stand-alone exe from python scripts using nuitka on Mac/Linux/Windows. Even supports GUIs with Qt/Pyside6 and Tkinter"
+description: "Build a standalone exe from python scripts using nuitka on Mac/Linux/Windows. Even supports GUIs with Qt/Pyside6 and Tkinter"
 
 inputs:
   working-directory:
@@ -19,6 +19,10 @@ inputs:
   script-name:
     required: true
     description: "Name or path to python script that is to be built"
+
+  # Enable Nuitka Commercial features of Nuitka using a PAT (access token)
+  access-token:
+    description: "Github personal access token of an account authorized to access the Nuitka-commercial repo"
 
   ### Nuitka Options ###
   module:
@@ -48,7 +52,9 @@ inputs:
 
   ### Include Qt Plugins. ###
   include-qt-plugins:
-    description: "A comma separated list of plugins, such as platforms, qml, etc."
+    description: "A comma separated list of Qt plugins, such as qml, etc."
+  noinclude-qt-plugins:
+    description: "A comma separated list of Qt plugins to not included, to take away from default."
 
   ### Control the inclusion of modules and packages in result. ###
   include-data-dir:
@@ -80,10 +86,7 @@ inputs:
     description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
     required: false
 
-  # Enable Commercial features of Nuitka using a PAT (access token)
-  access-token:
-    description: "Github personal access token of an account authorized to access the Nuitka/Nuitka-commercial repo"
-
+  # Console handling
   enable-console:
     type: boolean
     description: 'When compiling for Windows or macOS, enable the console window and create a console application. This disables hints from certain modules, e.g. "PySide" that suggest to disable it. Defaults to true.'
@@ -92,6 +95,23 @@ inputs:
     type: boolean
     default: false
     description: "When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
+
+  # Version information
+  company-name:
+    description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
+    default: "${{ github.repository_owner }}"
+  product-name:
+    description: Name of the product to use in version information. Defaults to base filename of the binary.
+  file-version:
+    description: File version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+  product-version:
+    description: Product version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+  file-description:
+    description: Description of the file use in version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
+  copyright:
+    description: Copyright information to add to version information. Defaults to empty.
+  trademarks:
+    description: Trademarks information to add to version information. Defaults to empty.
 
   # Windows specific controls
   windows-icon-from-ico:
@@ -104,21 +124,10 @@ inputs:
     description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
     type: boolean
     default: false
-  windows-company-name:
-    description: Name of the company to use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
-    default: "${{ github.repository_owner }}"
-  windows-product-name:
-    description: Name of the product to use in Windows Version information. Defaults to base filename of the binary.
-  windows-file-version:
-    description: File version to use in Windows Version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
-  windows-product-version:
-    description: Product version to use in Windows Version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
-  windows-file-description:
-    description: Description of the file use in Windows Version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
-  windows-onefile-tempdir-spec:
+  onefile-tempdir-spec:
     description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
   mingw64:
-    description: "Allows/enforces building with MinGW64"
+    description: "Allows/enforces building with MinGW64 on Windows"
     type: boolean
     default: false
     required: false
@@ -172,6 +181,7 @@ runs:
 
         pip install "${repo_url}/@${{inputs.nuitka-version }}#egg=nuitka"
     - name: Install ccache
+      # TODO: Proper "in" test could make sense here.
       if: ${{ inputs.disable-cache != 'ccache' && runner.os == 'Linux' }}
       shell: bash
       run: |
@@ -187,108 +197,10 @@ runs:
           ${{ runner.os }}-python-
           ${{ runner.os }}-
 
-    - name: Build Executable (Windows)
-      if: runner.os == 'Windows'
-      shell: powershell
-      run: |
-        $ErrorActionPreference = 'Stop'
-        $args = @()
-        if (("${{ inputs.standalone }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
-          $args += @('--standalone')
-        }
-        if (("${{ inputs.onefile }}" -eq '${{ true }}') -and ("${{ inputs.module }}" -ne '${{ true }}')){
-          $args += @('--onefile')
-        }
-        if ("${{ inputs.assume-yes-for-downloads }}" -eq '${{ true }}'){
-          $args += @('--assume-yes-for-downloads')
-        }
-        if ("${{ inputs.output-dir }}" -ne ''){
-          $args += @('--output-dir="${{ inputs.output-dir }}"')
-        }
-        if ("${{ inputs.enable-plugins }}" -ne ''){
-          $plugins = ("${{ inputs.enable-plugins }}" -split '\s*,\s*')
-          foreach ($plugin in $plugins) {
-            $args += @("--enable-plugin=$plugin");
-          }
-        }
-        if ("${{ inputs.include-qt-plugins }}" -ne ''){
-          $plugins = ("${{ inputs.include-qt-plugins }}" -split '\s*,\s*')
-          foreach ($plugin in $plugins) {
-            $args += @("--include-qt-plugins=$plugin");
-          }
-        }
-        if ("${{ inputs.include-package }}" -ne ''){
-          $data = ("${{ inputs.include-package }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--include-package=$datum");
-          }
-        }
-        if ("${{ inputs.include-module }}" -ne ''){
-          $data = ("${{ inputs.include-module }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--include-module=$datum");
-          }
-        }
-        if ("${{ inputs.include-data-dir }}" -ne ''){
-          $data = ("${{ inputs.include-data-dir }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--include-data-dir=$datum");
-          }
-        }
-        if ("${{ inputs.include-data-files }}" -ne ''){
-          $data = ("${{ inputs.include-data-files }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--include-data-files=$datum");
-          }
-        }
-        if ("${{ inputs.include-package-data }}" -ne ''){
-          $data = ("${{ inputs.include-package-data }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--include-package-data=$datum");
-          }
-        }
-        if ("${{ inputs.nofollow-import-to }}" -ne ''){
-          $data = ("${{ inputs.nofollow-import-to }}" -split '\s*,\s*')
-          foreach ($datum in $data) {
-            $args += @("--nofollow-import-to=$datum");
-          }
-        }
-        if ("${{ inputs.user-package-configuration-file }}" -ne ''){
-          $user_yaml_files = ("${{ inputs.user-package-configuration-file }}" -split '\s*,\s*')
-          foreach ($user_yaml_file in $user_yaml_files) {
-            $args += @("--user-package-configuration-file=$user_yaml_file");
-          }
-        }
-        if ("${{ inputs.output-file }}" -ne ''){
-          $args += @('-o', '${{ inputs.output-file }}')
-        }
-        if ("${{ inputs.disable-console }}" -eq '${{ true }}'){
-          $args += @('--disable-console')
-        }
-        if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
-          $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
-        }
-        if ("${{ inputs.mingw64 }}" -eq '${{ true }}'){
-          $args += @('--mingw64')
-        }
-        if ("${{ inputs.show-scons }}" -eq '${{ true }}'){
-          $args += @('--show-scons')
-        }
-        if ("${{ inputs.disable-cache }}" -eq '${{ true }}'){
-          $args += @('--disable-cache=${{ inputs.disable-cache }}')
-        }
-        if ("${{ inputs.module }}" -ne '${{ false }}'){
-          python -m nuitka $args --module "${{ inputs.script-name }}"
-        } else {
-          python -m nuitka $args "${{ inputs.script-name }}"
-        }
-      working-directory: ${{ inputs.working-directory }}
-
-
-    - name: Build Executable (macOS and Linux)
-      if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+    - name: Build with Nuitka
       shell: bash
       run: |
+        set -e
         ARGS=""
         SPACE=" "
         if [ "${{ inputs.module }}" != "${{ false }}" ]; then
@@ -314,6 +226,9 @@ runs:
         fi
         if [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
           ARGS+=" --disable-console"
+        fi
+        if [ "${{ inputs.enable-console }}" == "${{ true }}" ]; then
+          ARGS+=" --enable-console"
         fi
         if [ "${{ inputs.enable-plugins }}" != "" ]; then
           for plugin in $(echo ${{ inputs.enable-plugins }} | sed "s/,/ /g")
@@ -371,6 +286,35 @@ runs:
         fi
         if [ "${{ inputs.disable-cache }}" != "" ]; then
           ARGS+=" --disable-cache=${{ inputs.disable-cache }}"
+        fi
+        if [ "${{ inputs.company-name }}" != "" ]; then
+          ARGS+=" --company-name=${{ inputs.company-name }}"
+        fi
+        if [ "${{ inputs.product-name }}" != "" ]; then
+          ARGS+=" --product-name=${{ inputs.product-name }}"
+        fi
+        if [ "${{ inputs.file-version }}" != "" ]; then
+          ARGS+=" --file-version=${{ inputs.file-version }}"
+        fi
+        if [ "${{ inputs.product-version }}" != "" ]; then
+          ARGS+=" --product-version=${{ inputs.product-version }}"
+        fi
+        if [ "${{ inputs.file-description }}" != "" ]; then
+          ARGS+=" --file-description=${{ inputs.file-description }}"
+        fi
+        if [ "${{ inputs.copyright }}" != "" ]; then
+          ARGS+=" --copyright=${{ inputs.copyright }}"
+        fi
+        if [ "${{ inputs.trademark }}" != "" ]; then
+          ARGS+=" --trademark=${{ inputs.trademark }}"
+        fi
+        if [ ${{ runner.os }} == 'Windows' ]; then
+          if ("${{ inputs.mingw64 }}" -eq '${{ true }}'){
+            $args += @('--mingw64')
+          }
+          if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
+            $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
+          }
         fi
         if [ ${{ runner.os }} == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" ] || [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
