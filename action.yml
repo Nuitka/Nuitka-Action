@@ -93,6 +93,8 @@ inputs:
     description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
     type: boolean
     default: false
+  no-deployment-flag:
+    description: "Partially disables debugging helpers, that will help with runtime issues."
 
   ### Output choices ##
   output-dir:
@@ -247,6 +249,9 @@ runs:
         fi
         if [ "${{ inputs.deployment }}" == "${{ true }}" ]; then
           ARGS+=" --deployment"
+        fi
+        if [ "${{ inputs.no-deployment-flag }}" != "" ]; then
+          ARGS+=" no-deployment-flag=${{ inputs.no-deployment-flag }}"
         fi
         if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
