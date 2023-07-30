@@ -125,7 +125,7 @@ inputs:
     type: boolean
     default: false
   onefile-tempdir-spec:
-    description: "Use this as a temporary folder. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', i.e. system temporary directory."
+    description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."
   mingw64:
     description: "Allows/enforces building with MinGW64 on Windows"
     type: boolean
@@ -213,14 +213,17 @@ runs:
         set -e
         ARGS=""
         SPACE=" "
-        if [ "${{ inputs.module }}" != "${{ false }}" ]; then
+        if [ "${{ inputs.module }}" == "${{ true }}" ]; then
           ARGS+=" --module"
         fi
-        if [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+        if [ "${{ inputs.standalone }}" == "${{ true }}" ]; then
           ARGS+=" --standalone"
         fi
-        if [ "${{ inputs.onefile }}" == "${{ true }}" ] && [ "${{ inputs.standalone }}" == "${{ true }}" ] && [ "${{ inputs.module }}" != "${{ true }}" ]; then
+        if [ "${{ inputs.onefile }}" == "${{ true }}" ]; then
           ARGS+=" --onefile"
+        fi
+        if [ "${{ inputs.onefile-tempdir-spec }}" == "${{ true }}" ]; then
+          ARGS+=" --onefile-tempdir-spec=${{ inputs.onefile-tempdir-spec"
         fi
         if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
