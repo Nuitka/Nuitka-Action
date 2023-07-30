@@ -88,6 +88,12 @@ inputs:
     type: boolean
     default: false
 
+  ### Compilation modes ###
+  deployment:
+    description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
+    type: boolean
+    default: false
+
   ### Output choices ##
   output-dir:
     description: "Directory for output builds"
@@ -238,6 +244,9 @@ runs:
         fi
         if [ "${{ inputs.onefile-no-compression }}" == "${{ true }}" ]; then
           ARGS+=" --onefile-no-compression"
+        fi
+        if [ "${{ inputs.deployment }}" == "${{ true }}" ]; then
+          ARGS+=" --deployment"
         fi
         if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
