@@ -240,7 +240,6 @@ runs:
       run: |
         set -e
         ARGS=""
-        SPACE=" "
         if [ "${{ inputs.module }}" == "${{ true }}" ]; then
           ARGS+=" --module"
         fi
@@ -363,13 +362,13 @@ runs:
         fi
 
         # Commercial file embedding features.
-        if [ "${{ inputs.embed-data-files-compile-time-pattern }}" != "" then
+        if [ "${{ inputs.embed-data-files-compile-time-pattern }}" != "" ]; then
           ARGS+=" --embed-data-files-compile-time-pattern=${{ inputs.embed-data-files-compile-time-pattern }}"
         fi
-        if [ "${{ inputs.embed-data-files-run-time-pattern }}" != "" then
+        if [ "${{ inputs.embed-data-files-run-time-pattern }}" != "" ]; then
           ARGS+=" --embed-data-files-run-time-pattern=${{ inputs.embed-data-files-run-time-pattern }}"
         fi
-        if [ "${{ inputs.embed-data-files-qt-resource-pattern }}" != "" then
+        if [ "${{ inputs.embed-data-files-qt-resource-pattern }}" != "" ]; then
           ARGS+=" --embed-data-files-qt-resource-pattern=${{ inputs.embed-data-files-qt-resource-pattern }}"
         fi
         if [ "${{ inputs.embed-debug-qt-resources }}" == "${{ true }}" ]; then
@@ -377,7 +376,7 @@ runs:
         fi
 
         # Commercial traceback features.
-        if [ "${{ inputs.encryption-key }}" != "" then
+        if [ "${{ inputs.encryption-key }}" != "" ]; then
           ARGS+=" --encryption-key=${{ inputs.encryption-key }}"
         fi
         if [ "${{ inputs.encrypt-stdout }}" == "${{ true }}" ]; then
@@ -388,17 +387,17 @@ runs:
         fi
 
         # Windows only features.
-        if [ ${{ runner.os }} == 'Windows' ]; then
-          if ("${{ inputs.mingw64 }}" -eq '${{ true }}'){
-            $args += @('--mingw64')
-          }
-          if ("${{ inputs.windows-icon-from-ico }}" -ne ''){
-            $args += @('--windows-icon-from-ico="${{ inputs.windows-icon-from-ico }}"')
-          }
+        if [ "${{ runner.os }}" == 'Windows' ]; then
+          if [ "${{ inputs.mingw64 }}" == "${{ true }}" ]; then
+            ARGS+=" --mingw64"
+          fi
+          if [ "${{ inputs.windows-icon-from-ico }}" != "" ]; then
+            ARGS+=" --windows-icon-from-ico=${{ inputs.windows-icon-from-ico }}"
+          fi
         fi
 
         # macOS only features
-        if [ ${{ runner.os }} == 'macOS' ]; then
+        if [ "${{ runner.os }}" == 'macOS' ]; then
           if [ "${{ inputs.macos-create-app-bundle }}" == "true" ] || [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
             ARGS+=" --macos-create-app-bundle"
           fi
@@ -428,10 +427,10 @@ runs:
           fi
         fi
 
-        # Linux only features
-        if [ ${{ runner.os }} == 'Linux' ]; then
+        # Linux only features (not yet, but when we add them uncomment this)
+        # if [ ${{ runner.os }} == 'Linux' ]; then
 
-        fi
+        # fi
 
         python -m nuitka $ARGS "${{ inputs.script-name }}"
       working-directory: ${{ inputs.working-directory }}
