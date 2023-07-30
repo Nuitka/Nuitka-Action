@@ -180,6 +180,18 @@ inputs:
   embed-debug-qt-resources:
     description: For debugging purposes, print out information for Qt resources not found.
 
+  # traceback encryption (commercial only)
+  encryption-key:
+    description: "The key to use."
+  encrypt-stdout:
+    description: "Apply encryption to standard output."
+    type: boolean
+    default: false
+  encrypt-stderr:
+    description: "Apply encryption to standard error."
+    type: boolean
+    default: false
+
   # action controls:
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
@@ -350,7 +362,7 @@ runs:
           ARGS+=" --trademark=${{ inputs.trademark }}"
         fi
 
-        # Commercial debugging features.
+        # Commercial file embedding features.
         if [ "${{ inputs.embed-data-files-compile-time-pattern }}" != "" then
           ARGS+=" --embed-data-files-compile-time-pattern=${{ inputs.embed-data-files-compile-time-pattern }}"
         fi
@@ -362,6 +374,17 @@ runs:
         fi
         if [ "${{ inputs.embed-debug-qt-resources }}" == "${{ true }}" ]; then
           ARGS+=" --embed-debug-qt-resources"
+        fi
+
+        # Commercial traceback features.
+        if [ "${{ inputs.encryption-key }}" != "" then
+          ARGS+=" --encryption-key=${{ inputs.encryption-key }}"
+        fi
+        if [ "${{ inputs.encrypt-stdout }}" == "${{ true }}" ]; then
+          ARGS+=" --encrypt-stdout"
+        fi
+        if [ "${{ inputs.encrypt-stderr }}" == "${{ true }}" ]; then
+          ARGS+=" --encrypt-stderr"
         fi
 
         # Windows only features.
