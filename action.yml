@@ -116,8 +116,7 @@ inputs:
 
   # Version information
   company-name:
-    description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to GITHUB_REPOSITORY_OWNER.
-    default: "${{ github.repository_owner }}"
+    description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name.
   product-name:
     description: Name of the product to use in version information. Defaults to base filename of the binary.
   file-version:
