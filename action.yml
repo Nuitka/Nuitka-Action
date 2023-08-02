@@ -105,10 +105,6 @@ inputs:
     required: false
 
   # Console handling
-  enable-console:
-    type: boolean
-    description: 'When compiling for Windows or macOS, enable the console window and create a console application. This disables hints from certain modules, e.g. "PySide" that suggest to disable it. Defaults to true.'
-    default: true
   disable-console:
     type: boolean
     default: false
