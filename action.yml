@@ -261,7 +261,7 @@ runs:
           ARGS+=" --deployment"
         fi
         if [ "${{ inputs.no-deployment-flag }}" != "" ]; then
-          ARGS+=" no-deployment-flag=${{ inputs.no-deployment-flag }}"
+          ARGS+=" --no-deployment-flag='${{ inputs.no-deployment-flag }}'"
         fi
         if [ "${{ inputs.show-scons }}" == "${{ true }}" ]; then
           ARGS+=" --show-scons"
