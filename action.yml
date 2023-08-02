@@ -273,7 +273,7 @@ runs:
           ARGS+=" --output-dir=${{ inputs.output-dir }}"
         fi
         if [ "${{ inputs.output-file }}" != "" ]; then
-          ARGS+=" -o ${{ inputs.output-file }}"
+          ARGS+=" --output-filename=${{ inputs.output-file }}"
         fi
         if [ "${{ inputs.disable-console }}" == "${{ true }}" ]; then
           ARGS+=" --disable-console"
