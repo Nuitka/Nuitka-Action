@@ -59,6 +59,8 @@ inputs:
   ### Control the inclusion of modules and packages in result. ###
   include-data-dir:
     description: 'Include data files from complete directory in the distribution. This is recursive. Check "--include-data-files" with patterns if you want non-recursive inclusion. An example would be "--include-data-dir=/path/some_dir=data/some_dir" for plain copy, of the whole directory. All files are copied, if you want to exclude files you need to remove them beforehand, or use "--noinclude-data-files" option to remove them. Default empty.'
+  noinclude-data-files:
+    description: Do not include data files matching the filename pattern given. This is against the target filename, not source paths. So to ignore a file pattern from package data for "package_name" should be matched as "package_name/*.txt". Or for the whole directory simply use "package_name". Default empty.
   include-data-files:
     description: 'Include data files by filenames in the distribution. There are many allowed forms. With "--include-data-files=/path/to/file/*.txt=folder_name/some.txt" it will copy a single file and complain if it"s multiple. With "--include-data-files=/path/to/files/*.txt=folder_name/" it will put all matching files into that folder. For recursive copy there is a form with 3 values that "--include-data-files=/path/to/scan=folder_name=**/*.txt" that will preserve directory structure. Default empty.'
   include-package:
@@ -309,6 +311,12 @@ runs:
           for datum in $(echo ${{ inputs.include-data-dir }} | sed "s/,/ /g")
           do
             ARGS+=" --include-data-dir=$datum"
+          done
+        fi
+        if [ "${{ inputs.noinclude-data-files }}" != "" ]; then
+          for datum in $(echo ${{ inputs.noinclude-data-files }} | sed "s/,/ /g")
+          do
+            ARGS+=" --noinclude-data-files=$datum"
           done
         fi
         if [ "${{ inputs.include-data-files }}" != "" ]; then
