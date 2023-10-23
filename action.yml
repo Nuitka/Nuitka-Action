@@ -1,5 +1,7 @@
 name: Build executables or extension modules from Python projects
 
+# spell-checker: ignore onefile,pyside,tempdir,nofollow,noinclude,uiaccess
+
 branding:
   icon: "package"
   color: "blue"
