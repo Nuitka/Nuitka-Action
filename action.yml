@@ -26,7 +26,7 @@ inputs:
   access-token:
     description: "Github personal access token of an account authorized to access the Nuitka-commercial repo"
 
-  ### Nuitka Options ###
+  ### Nuitka Modes ###
   module:
     type: boolean
     default: false
@@ -84,7 +84,7 @@ inputs:
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
-  # Onefile behaviour details
+  ### Onefile behavior details ###
   onefile-tempdir-spec:
     description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."
   onefile-child-grace-time:
@@ -120,7 +120,7 @@ inputs:
     default: false
     description: "When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
 
-  # Version information
+  ### Version information ###
   company-name:
     description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name.
   product-name:
@@ -136,7 +136,7 @@ inputs:
   trademarks:
     description: Trademarks information to add to version information. Defaults to empty.
 
-  # Windows specific controls
+  ### Windows specific controls ###
   windows-icon-from-ico:
     description: Add executable icon. Can be given multiple times for different resolutions or files with multiple icons inside. In the later case, you may also suffix with \#<n> where n is an integer index starting from 1, specifying a specific icon to be included, and all others to be ignored.
   windows-uac-admin:
@@ -153,7 +153,7 @@ inputs:
     default: false
     required: false
 
-  # macOS specific controls:
+  ### macOS specific controls: ###
   macos-create-app-bundle:
     description: "When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false."
     type: boolean
@@ -175,7 +175,7 @@ inputs:
   macos-app-protected-resource:
     description: "Request an entitlement for access to a macOS protected resources, e.g. 'NSMicrophoneUsageDescription:Microphone access for recording audio.' requests access to the microphone and provides an informative text for the user, why that is needed. Before the colon, is an OS identifier for an access right, then the informative text. Legal values can be found on https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and the option can be specified multiple times. Default empty."
 
-  # data file embedding (commercial only)
+  ### data file embedding (commercial only) ###
   embed-data-files-compile-time-pattern:
     description: Pattern of data files to embed for use during compile time. These should match target filenames.
   embed-data-files-run-time-pattern:
@@ -185,7 +185,7 @@ inputs:
   embed-debug-qt-resources:
     description: For debugging purposes, print out information for Qt resources not found.
 
-  # traceback encryption (commercial only)
+  ### traceback encryption (commercial only) ###
   encryption-key:
     description: "The key to use."
   encrypt-stdout:
@@ -197,7 +197,7 @@ inputs:
     type: boolean
     default: false
 
-  # action controls:
+  ### action controls: ###
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
 
