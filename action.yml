@@ -104,11 +104,15 @@ inputs:
     description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
     required: false
 
-  # Console handling
+  ### Console handling ###
   disable-console:
     type: boolean
     default: false
     description: "When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
+  enable-console:
+    type: boolean
+    default: false
+    description: "When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
 
   # Version information
   company-name:
