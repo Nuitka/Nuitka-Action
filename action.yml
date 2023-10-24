@@ -66,7 +66,7 @@ inputs:
   include-package-data:
     description: "Include package data. Detects data files of packages automatically and copies them over. Can be a list. Default empty."
   noinclude-data-files:
-    description: 'Do not include data files matching the filename pattern given. This is against the target filename, not source paths. So to ignore a file pattern from package data for 'package_name' should be matched as 'package_name/*.txt'. Or for the whole directory simply use 'package_name'. Default empty.'
+    description: "Do not include data files matching the filename pattern given. This is against the target filename, not source paths. So to ignore a file pattern from package data for 'package_name' should be matched as 'package_name/*.txt'. Or for the whole directory simply use 'package_name'. Default empty."
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
