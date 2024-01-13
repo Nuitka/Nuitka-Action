@@ -29,33 +29,7 @@ inputs:
     description: "Github personal access token of an account authorized to access the Nuitka-commercial repo"
 
   ### Nuitka Modes ###
-  module:
-    description: |
-      Create an importable binary extension module executable instead of a program. Defaults to off.
-  standalone:
-    description: |
-      Enable standalone mode for output. This allows you to transfer the created binary
-      to other machines without it using an existing Python installation. This also
-      means it will become big. It implies these option: "--follow-imports" and
-      "--python-flag=no_site". Defaults to off.
-  onefile:
-    description: |
-      On top of standalone mode, enable onefile mode. This means not a folder,
-      but a compressed executable is created and used. Defaults to off.
-  python-flag:
-    description: |
-      Python flags to use. Default is what you are using to run Nuitka, this
-      enforces a specific mode. These are options that also exist to standard
-      Python executable. Currently supported: "-S" (alias "no_site"),
-      "static_hashes" (do not use hash randomization), "no_warnings" (do not
-      give Python run time warnings), "-O" (alias "no_asserts"), "no_docstrings"
-      (do not use doc strings), "-u" (alias "unbuffered"), "isolated" (do not
-      load outside code) and "-m" (package mode, compile as "package.__main__").
-      Default empty.
-  python-debug:
-    description: |
-      Use debug version or not. Default uses what you are using to run Nuitka, most
-      likely a non-debug version. Only for debugging and testing purposes.
+{{ get_top_options() }}
 
   assume-yes-for-downloads:
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
@@ -193,7 +167,7 @@ inputs:
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
 
-
+{% raw %}
 runs:
   using: "composite"
   steps:
@@ -241,3 +215,4 @@ runs:
         set -e
         python -m nuitka --github-workflow-options
       working-directory: ${{ inputs.working-directory }}
+{% endraw %}
