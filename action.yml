@@ -28,25 +28,15 @@ inputs:
 
   ### Nuitka Modes ###
   module:
-    type: boolean
-    default: false
     description: "Create an extension module executable instead of a program. Defaults to off."
   standalone:
-    type: boolean
-    default: true
     description: 'Enable standalone mode for output. This allows you to transfer the created binary to other machines without it using an existing Python installation. This also means it will become big. It implies these option: "-- follow-imports" and "--python-flag=no_site". Defaults to true.'
   onefile:
-    type: boolean
-    default: true
     description: "On top of standalone mode, enable onefile mode. This means not a folder, but a compressed executable is created and used. Defaults to true."
   assume-yes-for-downloads:
-    type: boolean
-    default: true
     description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
   show-scons:
     description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
-    type: boolean
-    default: true
 
   ### Nuitka Plugins to enable. ###
   enable-plugins:
@@ -91,14 +81,10 @@ inputs:
     description: "When stopping the child, e.g. due to CTRL-C or shutdown, how much time to allow before killing it the hard way. Unit is ms. Default 5000."
   onefile-no-compression:
     description: "When creating the onefile, disable compression of the payload. Default is false."
-    type: boolean
-    default: false
 
   ### Compilation modes ###
   deployment:
     description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
-    type: boolean
-    default: false
   no-deployment-flag:
     description: "Partially disables debugging helpers, that will help with runtime issues."
 
@@ -108,16 +94,11 @@ inputs:
     default: build
   output-file:
     description: "Specify how the executable should be named. For extension modules there is no choice, also not for standalone mode and using it will be an error. This may include path information that needs to exist though. Defaults to '<program_name>' on this platform. .exe)"
-    required: false
 
   ### Console handling ###
   disable-console:
-    type: boolean
-    default: false
     description: "When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
   enable-console:
-    type: boolean
-    default: false
     description: "When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
 
   ### Version information ###
@@ -141,23 +122,14 @@ inputs:
     description: Add executable icon. Can be given multiple times for different resolutions or files with multiple icons inside. In the later case, you may also suffix with \#<n> where n is an integer index starting from 1, specifying a specific icon to be included, and all others to be ignored.
   windows-uac-admin:
     description: Request Windows User Control, to grant admin rights on execution. (Windows only). Defaults to off.
-    type: boolean
-    default: false
   windows-uac-uiaccess:
     description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
-    type: boolean
-    default: false
   mingw64:
     description: "Allows/enforces building with MinGW64 on Windows"
-    type: boolean
-    default: false
-    required: false
 
   ### macOS specific controls: ###
   macos-create-app-bundle:
     description: "When compiling for macOS, create a bundle rather than a plain binary application. Currently experimental and incomplete. Currently this is the only way to unlock disabling of console. Defaults to false."
-    type: boolean
-    default: false
   macos-app-icon:
     description: "Add icon for the application bundle to use. Can be given only one time. Defaults to Python icon if available."
   macos-target-arch:
@@ -190,12 +162,8 @@ inputs:
     description: "The key to use."
   encrypt-stdout:
     description: "Apply encryption to standard output."
-    type: boolean
-    default: false
   encrypt-stderr:
     description: "Apply encryption to standard error."
-    type: boolean
-    default: false
 
   ### action controls: ###
   disable-cache:
