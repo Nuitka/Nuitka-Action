@@ -6,23 +6,23 @@ branding:
   icon: "package"
   color: "blue"
 
-description: "Build a standalone exe from python scripts using nuitka on Mac/Linux/Windows. Even supports GUIs with Qt/Pyside6 and Tkinter"
+description: "Build a modules or standalone executable from python code using Nuitka on Mac/Linux/Windows. Very wide range of compatibility."
 
 inputs:
   working-directory:
     default: "."
-    description: "Directory to run nuitka"
+    description: "Directory to run nuitka in if not top level"
 
   nuitka-version:
     default: "main"
-    description: "Version of nuitka to use"
+    description: "Version of nuitka to use, branches, tags work"
 
   ### Only Required Input ###
   script-name:
     required: true
-    description: "Name or path to python script that is to be built"
+    description: "Path to python script that is to be built"
 
-  # Enable Nuitka Commercial features of Nuitka using a PAT (access token)
+  # Enable Nuitka Commercial features of Nuitka using a PAT (personal access token)
   access-token:
     description: "Github personal access token of an account authorized to access the Nuitka-commercial repo"
 
