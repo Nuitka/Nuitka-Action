@@ -1,6 +1,8 @@
+# yamllint disable rule:line-length
+# yamllint disable rule:comments
+# too many spelling things, spell-checker: disable
+---
 name: Build executables or extension modules from Python projects
-
-# spell-checker: ignore onefile,pyside,tempdir,nofollow,noinclude,uiaccess
 
 branding:
   icon: "package"
@@ -20,7 +22,7 @@ inputs:
   ### Only Required Input ###
   script-name:
     required: true
-    description: "Path to python script that is to be built"
+    description: "Path to python script that is to be built."
 
   # Enable Nuitka Commercial features of Nuitka using a PAT (personal access token)
   access-token:
@@ -28,7 +30,9 @@ inputs:
 
   ### Nuitka Modes ###
   module:
-    description: "Create an extension module executable instead of a program. Defaults to off."
+    description: |
+      Create an extension module executable instead of a program.
+      Defaults to off.
   standalone:
     description: 'Enable standalone mode for output. This allows you to transfer the created binary to other machines without it using an existing Python installation. This also means it will become big. It implies these option: "-- follow-imports" and "--python-flag=no_site". Defaults to true.'
   onefile:
