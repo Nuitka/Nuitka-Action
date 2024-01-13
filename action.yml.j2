@@ -46,15 +46,8 @@ inputs:
   noinclude-qt-plugins:
     description: "A comma separated list of Qt plugins to not included, to take away from default."
 
-  ### Control the inclusion of modules and packages in result. ###
-  include-data-dir:
-    description: 'Include data files from complete directory in the distribution. This is recursive. Check "--include-data-files" with patterns if you want non-recursive inclusion. An example would be "--include-data-dir=/path/some_dir=data/some_dir" for plain copy, of the whole directory. All files are copied, if you want to exclude files you need to remove them beforehand, or use "--noinclude-data-files" option to remove them. Default empty.'
-  include-data-files:
-    description: 'Include data files by filenames in the distribution. There are many allowed forms. With "--include-data-files=/path/to/file/*.txt=folder_name/some.txt" it will copy a single file and complain if it"s multiple. With "--include-data-files=/path/to/files/*.txt=folder_name/" it will put all matching files into that folder. For recursive copy there is a form with 3 values that "--include-data-files=/path/to/scan=folder_name=**/*.txt" that will preserve directory structure. Default empty.'
-  include-package-data:
-    description: "Include package data. Detects data files of packages automatically and copies them over. Can be a list. Default empty."
-  noinclude-data-files:
-    description: "Do not include data files matching the filename pattern given. This is against the target filename, not source paths. So to ignore a file pattern from package data for 'package_name' should be matched as 'package_name/*.txt'. Or for the whole directory simply use 'package_name'. Default empty."
+  ### Control the inclusion of data files in result. ###
+{{ get_group_options("Data files") }}
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:

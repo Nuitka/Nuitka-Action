@@ -14,7 +14,7 @@ template = getTemplate(
 )
 
 
-def getTopOptions():
+def getOptions():
     for option in parser.iterateOptions():
         # Help option
         if "--help" in option._long_opts:
@@ -34,11 +34,25 @@ def getTopOptions():
         if option.help is SUPPRESS_HELP:
             continue
 
+        yield option
+
+
+def getTopOptions():
+    for option in getOptions():
         container = getattr(option, "container", None)
 
         if isinstance(container, OurOptionParser):
             yield option
 
+def getGroupOptions(group_name):
+    for option in getOptions():
+        container = getattr(option, "container", None)
+
+        if isinstance(container, OurOptionParser):
+            continue
+
+        if container.title == group_name:
+            yield option
 
 def formatOption(option):
     return (
@@ -54,11 +68,17 @@ def get_top_options():
     for option in getTopOptions():
         result.append(formatOption(option))
 
-    # assert False, "\n".join(result)
     return textwrap.indent("\n".join(result), "  ")
 
+def get_group_options(group_caption):
+    result = []
 
-action_yaml = template.render(get_top_options=get_top_options)
+    for option in getGroupOptions(group_caption):
+        result.append(formatOption(option))
+
+    return textwrap.indent("\n".join(result), "  ")
+
+action_yaml = template.render(get_top_options=get_top_options, get_group_options=get_group_options,)
 
 if changeTextFileContents("action.yml", action_yaml):
     print("Updated.")
