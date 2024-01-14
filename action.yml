@@ -42,6 +42,7 @@ inputs:
     description: |
       On top of standalone mode, enable onefile mode. This means not a folder,
       but a compressed executable is created and used. Defaults to off.
+    default: true
   python-flag:
     description: |
       Python flags to use. Default is what you are using to run Nuitka, this
@@ -57,8 +58,6 @@ inputs:
       Use debug version or not. Default uses what you are using to run Nuitka, most
       likely a non-debug version. Only for debugging and testing purposes.
 
-  assume-yes-for-downloads:
-    description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
   show-scons:
     description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
 
@@ -139,6 +138,25 @@ inputs:
     description: "When stopping the child, e.g. due to CTRL-C or shutdown, how much time to allow before killing it the hard way. Unit is ms. Default 5000."
   onefile-no-compression:
     description: "When creating the onefile, disable compression of the payload. Default is false."
+
+  warn-implicit-exceptions:
+    description: |
+      Enable warnings for implicit exceptions detected at compile time.
+  warn-unusual-code:
+    description: |
+      Enable warnings for unusual code detected at compile time.
+  assume-yes-for-downloads:
+    description: |
+      Allow Nuitka to download external code if necessary, e.g. dependency
+      walker, ccache, and even gcc on Windows. To disable, redirect input
+      from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.
+    default: true
+  nowarn-mnemonic:
+    description: |
+      Disable warning for a given mnemonic. These are given to make sure you are aware of
+      certain topics, and typically point to the Nuitka website. The mnemonic is the part
+      of the URL at the end, without the HTML suffix. Can be given multiple times and
+      accepts shell pattern. Default empty.
 
   ### Compilation modes ###
   deployment:

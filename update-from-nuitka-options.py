@@ -55,11 +55,20 @@ def getGroupOptions(group_name):
             yield option
 
 def formatOption(option):
-    return (
+    result = (
         option._long_opts[0].lstrip("-")
         + ":\n  description: |\n"
         + textwrap.indent(option.help, prefix="    ")
     )
+
+    if option.github_action_default is not None:
+        if type(option.github_action_default) is bool:
+            option.github_action_default = "true" if option.github_action_default else "false"
+
+        assert type(option.github_action_default) is str, option
+        result += "\n  default: " + option.github_action_default
+
+    return result
 
 
 def get_top_options():

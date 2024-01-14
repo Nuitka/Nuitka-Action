@@ -31,8 +31,6 @@ inputs:
   ### Nuitka Modes ###
 {{ get_top_options() }}
 
-  assume-yes-for-downloads:
-    description: 'Allow Nuitka to download external code if necessary, e.g. dependency walker, ccache, and even gcc on Windows. To disable, redirect input from nul device, e.g. "</dev/null" or "<NUL:". Default is to prompt.'
   show-scons:
     description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
 
@@ -72,6 +70,8 @@ inputs:
     description: "When stopping the child, e.g. due to CTRL-C or shutdown, how much time to allow before killing it the hard way. Unit is ms. Default 5000."
   onefile-no-compression:
     description: "When creating the onefile, disable compression of the payload. Default is false."
+
+{{ get_group_options("Control the warnings to be given by Nuitka") }}
 
   ### Compilation modes ###
   deployment:
