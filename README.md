@@ -1,14 +1,14 @@
-# Python-Script-to-Executable
+# Python-to-Executable-Or-Module
 
-This is a GitHub Action that builds stand-alone Windows, Mac, and Linux
-executable binaries from a python script using the amazing
-[nuitka](https://github.com/Nuitka/Nuitka) python compiler.
+This is a GitHub Action that builds Windows, Mac, and Linux
+binaries and modules from Python using the amazingly compatible
+[nuitka](https://github.com/Nuitka/Nuitka) Python compiler.
 
 ## Key Features
 
 - **Build Stand-along Executables** - Build a executable from your python script
-  (stand-alone *.exe or *.bin file executables and even .app bundles for Mac)
-- **Build Binary Python Modules** - Build binary *.pyd modules that can be
+  (stand-alone *.exe or *.bin file executables and even `.app` bundles for Mac)
+- **Build Binary Python Modules** - Build binary `*.pyd` modules that can be
   imported into other python scripts
 - **Mac, Linux, and Windows** - Support for Windows, Mac (including .app
   bundles), and Linux
@@ -108,7 +108,7 @@ Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-
 ensure that those libraries are included correctly.
 
 ```yaml
-- name: Qt GUI with Pyside6
+- name: Qt GUI with PySide6
   uses: Nuitka/Nuitka-Action@main
   with:
     nuitka-version: main
@@ -118,7 +118,7 @@ ensure that those libraries are included correctly.
 ```
 
 ```yaml
-- name: Python GUI With Tkinter
+- name: Python GUI With TkInter
   uses: Nuitka/Nuitka-Action@main
   with:
     nuitka-version: main
@@ -196,6 +196,21 @@ wheel==0.38.4
 zstandard==0.20.0
 ```
 
+## Value syntax
+
+Since Action workflows accept no lists, for options that can be given multiple times
+we provide support for splitting arguments by newline, which allows you to give multiple
+values like this (new with Nuitka 2.0).
+
+```yaml
+include-data-dir: |
+  source_path_dir1=dest_path_dir1
+  source_path_dir2=dest_path_dir2
+  source_path_dir3=dest_path_dir3
+```
+
+This works for all options that can be given multiple times on the command line.
+
 # Additional Documentation
 
 See [Nuitka](https://github.com/Nuitka/Nuitka) for full documentation on Nuitka. It's really a fantastic tool!
@@ -209,15 +224,15 @@ Nuitka is licensed under the [Apache 2.0 License](https://github.com/Nuitka/Nuit
 
 Python is licensed under the [Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
 
-## You are Reponsible for Complying with your Project's Dependencies' Licenses
+## You are Responsible for Complying with your Project's Dependencies' Licenses
 
 This tool compiles and/or copies your project's package dependencies (and their dependencies) into the output executable, which will be considered a combined and/or derivative work of those packages.
 
-> **_Important:_** You are responsibile for compliance with the licenses of your project's package dependencies. Please consult with an attorney about your individual/project's compliance needs and strategy.
+> **_Important:_** You are responsible for compliance with the licenses of your project's package dependencies. Please consult with an attorney about your individual/project's compliance needs and strategy.
 
 ## How to Comply With Dependency Package Licenses
 
-There are some great license checker tools that you might consider integrating with your project. Generally speaking, they enable you to specify which licenses (or types) are approved or disaproved and alert you whenever your project has a package dependency that is not approved.
+There are some great license checker tools that you might consider integrating with your project. Generally speaking, they enable you to specify which licenses (or types) are approved or disapproved and alert you whenever your project has a package dependency that is not approved.
 
 Here are a couple license checker tools:
 
