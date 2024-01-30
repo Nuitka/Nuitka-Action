@@ -276,7 +276,7 @@ runs:
         sudo apt-get install -y ccache
     - name: Cache Nuitka cache directory
       if: ${{ !inputs.disable-cache }}
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ env.NUITKA_CACHE_DIR }}
         key: ${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
