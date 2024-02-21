@@ -172,11 +172,6 @@ inputs:
       Keep deployment mode, but disable selectively parts of it. Errors from
       deployment mode will output these identifiers. Default empty.
 
-  deployment:
-    description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
-  no-deployment-flag:
-    description: "Partially disables debugging helpers, that will help with runtime issues."
-
   ### Output choices ##
   output-dir:
     description: "Directory for output builds"
