@@ -179,19 +179,29 @@ inputs:
 
   ### Version information ###
   company-name:
-    description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name.
+    description: |
+      Name of the company to use in version information. Defaults to unused.
   product-name:
-    description: Name of the product to use in version information. Defaults to base filename of the binary.
+    description: |
+      Name of the product to use in version information. Defaults to base filename of the binary.
   file-version:
-    description: File version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+    description: |
+      File version to use in version information. Must be a sequence of up to 4
+      numbers, e.g. 1.0 or 1.0.0.0, no more digits are allowed, no strings are
+      allowed. Defaults to unused.
   product-version:
-    description: Product version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
+    description: |
+      Product version to use in version information. Same rules as for file version.
+      Defaults to unused.
   file-description:
-    description: Description of the file use in version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
+    description: |
+      Description of the file used in version information. Windows only at this time. Defaults to binary filename.
   copyright:
-    description: Copyright information to add to version information. Defaults to empty.
+    description: |
+      Copyright used in version information. Windows/macOS only at this time. Defaults to not present.
   trademarks:
-    description: Trademarks information to add to version information. Defaults to empty.
+    description: |
+      Trademark used in version information. Windows/macOS only at this time. Defaults to not present.
 
   ### Windows specific controls ###
   windows-icon-from-ico:

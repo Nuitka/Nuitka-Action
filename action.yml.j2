@@ -93,20 +93,7 @@ inputs:
     description: "When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
 
   ### Version information ###
-  company-name:
-    description: Name of the company to use in version information. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name.
-  product-name:
-    description: Name of the product to use in version information. Defaults to base filename of the binary.
-  file-version:
-    description: File version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
-  product-version:
-    description: Product version to use in version information. Must be a sequence of up to 4 numbers, e.g. 1.0.0.0, only this format is allowed. One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to unused.
-  file-description:
-    description: Description of the file use in version information.  One of file or product version is required, when a version resource needs to be added, e.g. to specify product name, or company name. Defaults to nonsense.
-  copyright:
-    description: Copyright information to add to version information. Defaults to empty.
-  trademarks:
-    description: Trademarks information to add to version information. Defaults to empty.
+{{ get_group_options("Binary Version Information") }}
 
   ### Windows specific controls ###
 {{ get_group_options("Windows specific controls") }}
