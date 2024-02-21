@@ -195,13 +195,24 @@ inputs:
 
   ### Windows specific controls ###
   windows-icon-from-ico:
-    description: Add executable icon. Can be given multiple times for different resolutions or files with multiple icons inside. In the later case, you may also suffix with \#<n> where n is an integer index starting from 1, specifying a specific icon to be included, and all others to be ignored.
+    description: |
+      Add executable icon. Can be given multiple times for different resolutions
+      or files with multiple icons inside. In the later case, you may also suffix
+      with #<n> where n is an integer index starting from 1, specifying a specific
+      icon to be included, and all others to be ignored.
+  windows-icon-from-exe:
+    description: |
+      Copy executable icons from this existing executable (Windows only).
+  onefile-windows-splash-screen-image:
+    description: |
+      When compiling for Windows and onefile, show this while loading the application. Defaults to off.
   windows-uac-admin:
-    description: Request Windows User Control, to grant admin rights on execution. (Windows only). Defaults to off.
+    description: |
+      Request Windows User Control, to grant admin rights on execution. (Windows only). Defaults to off.
   windows-uac-uiaccess:
-    description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
-  mingw64:
-    description: "Allows/enforces building with MinGW64 on Windows"
+    description: |
+      Request Windows User Control, to enforce running from a few folders only, remote
+      desktop access. (Windows only). Defaults to off.
 
   ### macOS specific controls: ###
   macos-create-app-bundle:

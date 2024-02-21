@@ -109,14 +109,7 @@ inputs:
     description: Trademarks information to add to version information. Defaults to empty.
 
   ### Windows specific controls ###
-  windows-icon-from-ico:
-    description: Add executable icon. Can be given multiple times for different resolutions or files with multiple icons inside. In the later case, you may also suffix with \#<n> where n is an integer index starting from 1, specifying a specific icon to be included, and all others to be ignored.
-  windows-uac-admin:
-    description: Request Windows User Control, to grant admin rights on execution. (Windows only). Defaults to off.
-  windows-uac-uiaccess:
-    description: "Request Windows User Control, to enforce running from a few folders only, remote desktop access. (Windows only). Defaults to off."
-  mingw64:
-    description: "Allows/enforces building with MinGW64 on Windows"
+{{ get_group_options("Windows specific controls") }}
 
   ### macOS specific controls: ###
 {{ get_group_options("macOS specific controls") }}
