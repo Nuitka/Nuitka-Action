@@ -269,6 +269,11 @@ inputs:
       https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and
       the option can be specified multiple times. Default empty.
 
+  ### Linux specific controls: ###
+  linux-icon:
+    description: |
+      Add executable icon for onefile binary to use. Can be given only one time. Defaults to Python icon if available.
+
   ### data file embedding (commercial only) ###
   embed-data-files-compile-time-pattern:
     description: Pattern of data files to embed for use during compile time. These should match target filenames.
