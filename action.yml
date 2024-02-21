@@ -158,7 +158,20 @@ inputs:
       of the URL at the end, without the HTML suffix. Can be given multiple times and
       accepts shell pattern. Default empty.
 
-  ### Compilation modes ###
+  ### Deployment modes ###
+  deployment:
+    description: |
+      Disable code aimed at making finding compatibility issues easier. This
+      will e.g. prevent execution with "-c" argument, which is often used by
+      code that attempts run a module, and causes a program to start itself
+      over and over potentially. Disable once you deploy to end users, for
+      finding typical issues, this is very helpful during development. Default
+      off.
+  no-deployment-flag:
+    description: |
+      Keep deployment mode, but disable selectively parts of it. Errors from
+      deployment mode will output these identifiers. Default empty.
+
   deployment:
     description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
   no-deployment-flag:
@@ -301,6 +314,33 @@ inputs:
     description: "Apply encryption to standard output."
   encrypt-stderr:
     description: "Apply encryption to standard error."
+
+  debug:
+    description: |
+      Executing all self checks possible to find errors in Nuitka, do not use for
+      production. Defaults to off.
+  unstripped:
+    description: |
+      Keep debug info in the resulting object file for better debugger interaction.
+      Defaults to off.
+  trace-execution:
+    description: |
+      Traced execution output, output the line of code before executing it.
+      Defaults to off.
+  xml:
+    description: |
+      Write the internal program structure, result of optimization in XML form to given filename.
+  experimental:
+    description: |
+      Use features declared as 'experimental'. May have no effect if no experimental
+      features are present in the code. Uses secret tags (check source) per
+      experimented feature.
+  low-memory:
+    description: |
+      Attempt to use less memory, by forking less C compilation jobs and using
+      options that use less memory. For use on embedded machines. Use this in
+      case of out of memory problems. Defaults to off.
+
 
   ### action controls: ###
   disable-cache:

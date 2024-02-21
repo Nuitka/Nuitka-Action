@@ -73,7 +73,9 @@ inputs:
 
 {{ get_group_options("Control the warnings to be given by Nuitka") }}
 
-  ### Compilation modes ###
+  ### Deployment modes ###
+{{ get_group_options("Deployment control") }}
+
   deployment:
     description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
   no-deployment-flag:
@@ -121,6 +123,9 @@ inputs:
     description: "Apply encryption to standard output."
   encrypt-stderr:
     description: "Apply encryption to standard error."
+
+{{ get_group_options("Debug features") }}
+
 
   ### action controls: ###
   disable-cache:
