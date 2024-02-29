@@ -31,9 +31,6 @@ inputs:
   ### Nuitka Modes ###
 {{ get_top_options() }}
 
-  show-scons:
-    description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
-
   ### Nuitka Plugins to enable. ###
   enable-plugins:
     description: "A comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc."
@@ -43,6 +40,9 @@ inputs:
     description: "A comma separated list of Qt plugins, such as qml, etc."
   noinclude-qt-plugins:
     description: "A comma separated list of Qt plugins to not included, to take away from default."
+
+  ### Nuitka Tracing/Reporting features
+{{ get_group_options("Tracing features") }}
 
   ### Control the inclusion of data files in result. ###
 {{ get_group_options("Data files") }}

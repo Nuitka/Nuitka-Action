@@ -58,8 +58,6 @@ inputs:
       Use debug version or not. Default uses what you are using to run Nuitka, most
       likely a non-debug version. Only for debugging and testing purposes.
 
-  show-scons:
-    description: "Displays the detailed C compilation info from Scons during build process (useful for debugging purposes)"
 
   ### Nuitka Plugins to enable. ###
   enable-plugins:
@@ -70,6 +68,41 @@ inputs:
     description: "A comma separated list of Qt plugins, such as qml, etc."
   noinclude-qt-plugins:
     description: "A comma separated list of Qt plugins to not included, to take away from default."
+
+  ### Nuitka Tracing/Reporting features
+  report:
+    description: |
+      Report module, data files, compilation, plugin, etc. details in an XML output file. This
+      is also super useful for issue reporting. These reports can e.g. be used to re-create
+      the environment easily using it with '--create-environment-from-report', but contain a
+      lot of information. Default is off.
+  report-diffable:
+    description: |
+      Report data in diffable form, i.e. no timing or memory usage values that vary from run
+      to run. Default is off.
+  report-user-provided:
+    description: |
+      Report data from you. This can be given multiple times and be
+      anything in 'key=value' form, where key should be an identifier, e.g. use
+      '--report-user-provided=pipenv-lock-hash=64a5e4' to track some input values.
+      Default is empty.
+  report-template:
+    description: |
+      Report via template. Provide template and output filename 'template.rst.j2:output.rst'. For
+      built-in templates, check the User Manual for what these are. Can be given multiple times.
+      Default is empty.
+  quiet:
+    description: |
+      Disable all information outputs, but show warnings.
+      Defaults to off.
+  show-scons:
+    description: |
+      Run the C building backend Scons with verbose information, showing the executed commands,
+      detected compilers. Defaults to off.
+  show-memory:
+    description: |
+      Provide memory information and statistics.
+      Defaults to off.
 
   ### Control the inclusion of data files in result. ###
   include-package-data:
