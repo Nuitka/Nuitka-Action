@@ -99,9 +99,8 @@ inputs:
       Include data files from complete directory in the distribution. This is
       recursive. Check '--include-data-files' with patterns if you want non-recursive
       inclusion. An example would be '--include-data-dir=/path/some_dir=data/some_dir'
-      for plain copy, of the whole directory. All files are copied, if you want to
-      exclude files you need to remove them beforehand, or use '--noinclude-data-files'
-      option to remove them. Default empty.
+      for plain copy, of the whole directory. All non-code files are copied, if you
+      want to use '--noinclude-data-files' option to remove them. Default empty.
   noinclude-data-files:
     description: |
       Do not include data files matching the filename pattern given. This is against
@@ -310,6 +309,44 @@ inputs:
   encrypt-stderr:
     description: "Apply encryption to standard error."
 
+  ### Backend C compiler choices. ###
+  clang:
+    description: |
+      Enforce the use of clang. On Windows this requires a working Visual
+      Studio version to piggy back on. Defaults to off.
+  mingw64:
+    description: |
+      Enforce the use of MinGW64 on Windows. Defaults to off unless MSYS2 with MinGW Python is used.
+  msvc:
+    description: |
+      Enforce the use of specific MSVC version on Windows. Allowed values
+      are e.g. "14.3" (MSVC 2022) and other MSVC version numbers, specify
+      "list" for a list of installed compilers, or use "latest".
+
+      Defaults to latest MSVC being used if installed, otherwise MinGW64
+      is used.
+  jobs:
+    description: |
+      Specify the allowed number of parallel C compiler jobs. Defaults to the
+      system CPU count.
+  lto:
+    description: |
+      Use link time optimizations (MSVC, gcc, clang). Allowed values are
+      "yes", "no", and "auto" (when it's known to work). Defaults to
+      "auto".
+  static-libpython:
+    description: |
+      Use static link library of Python. Allowed values are "yes", "no",
+      and "auto" (when it's known to work). Defaults to "auto".
+  cf-protection:
+    description: |
+      This option is gcc specific. For the gcc compiler, select the
+      "cf-protection" mode. Default "auto" is to use the gcc default
+      value, but you can override it, e.g. to disable it with "none"
+      value. Refer to gcc documentation for "-fcf-protection" for the
+      details.
+
+  ### Debug features ###
   debug:
     description: |
       Executing all self checks possible to find errors in Nuitka, do not use for

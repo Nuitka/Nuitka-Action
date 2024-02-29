@@ -76,11 +76,6 @@ inputs:
   ### Deployment modes ###
 {{ get_group_options("Deployment control") }}
 
-  deployment:
-    description: "Disables debugging helpers, that will help with runtime issues. Only enable when you find no more issues."
-  no-deployment-flag:
-    description: "Partially disables debugging helpers, that will help with runtime issues."
-
   ### Output choices ##
   output-dir:
     description: "Directory for output builds"
@@ -124,6 +119,10 @@ inputs:
   encrypt-stderr:
     description: "Apply encryption to standard error."
 
+  ### Backend C compiler choices. ###
+{{ get_group_options("Backend C compiler choice") }}
+
+  ### Debug features ###
 {{ get_group_options("Debug features") }}
 
 
