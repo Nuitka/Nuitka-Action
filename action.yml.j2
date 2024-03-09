@@ -32,8 +32,7 @@ inputs:
 {{ get_top_options() }}
 
   ### Nuitka Plugins to enable. ###
-  enable-plugins:
-    description: "A comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc."
+{{ get_group_options("Plugin control") }}
 
   ### Include Qt Plugins. ###
   include-qt-plugins:

@@ -58,10 +58,27 @@ inputs:
       Use debug version or not. Default uses what you are using to run Nuitka, most
       likely a non-debug version. Only for debugging and testing purposes.
 
-
   ### Nuitka Plugins to enable. ###
   enable-plugins:
-    description: "A comma separated list of plugins, such as pyside2, pyside6, tk-inter, etc."
+    description: |
+      Enabled plugins. Must be plug-in names. Use '--plugin-list' to query the
+      full list and exit. Default empty.
+  user-plugin:
+    description: |
+      The file name of user plugin. Can be given multiple times. Default empty.
+  plugin-no-detection:
+    description: |
+      Plugins can detect if they might be used, and the you can disable the warning
+      via "--disable-plugin=plugin-that-warned", or you can use this option to disable
+      the mechanism entirely, which also speeds up compilation slightly of course as
+      this detection code is run in vain once you are certain of which plugins to
+      use. Defaults to off.
+  module-parameter:
+    description: |
+      Provide a module parameter. You are asked by some packages
+      to provide extra decisions. Format is currently
+      --module-parameter=module.name-option-name=value
+      Default empty.
 
   ### Include Qt Plugins. ###
   include-qt-plugins:
