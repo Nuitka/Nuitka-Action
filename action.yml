@@ -235,9 +235,9 @@ inputs:
 
   ### Console handling ###
   disable-console:
-    description: "When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
+    description: "Obsolete as of Nuitka 2.3: When compiling for Windows or macOS, disable the console window and create a GUI application. Defaults to false."
   enable-console:
-    description: "When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
+    description: "Obsolete as of Nuitka 2.3: When compiling for Windows or macOS, enable the console window and create a GUI application. Defaults to false and tells Nuitka your choice is intentional."
 
   ### Version information ###
   company-name:
@@ -266,6 +266,13 @@ inputs:
       Trademark used in version information. Windows/macOS only at this time. Defaults to not present.
 
   ### Windows specific controls ###
+  windows-console-mode:
+    description: |
+      Select console mode to use. Default mode is 'force' and creates a
+      console window if not available, i.e. the program was started from one. With
+      'disable' it doesn't create or use a console. With 'attach' an existing console
+      will be used for outputs. Default is 'force'.
+
   windows-icon-from-ico:
     description: |
       Add executable icon. Can be given multiple times for different resolutions
