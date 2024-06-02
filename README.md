@@ -1,35 +1,44 @@
 # Python-to-Executable-Or-Module
 
-This is a GitHub Action that builds Windows, Mac, and Linux
-binaries and modules from Python using the amazingly compatible
-[nuitka](https://github.com/Nuitka/Nuitka) Python compiler.
+This GitHub Action builds Windows, Mac, and Linux programs and extension modules from Python using
+the amazingly compatible [nuitka](https://github.com/Nuitka/Nuitka) Python compiler.
 
 ## Key Features
 
-- **Build Stand-along Executables** - Build a executable from your python script
-  (stand-alone *.exe or *.bin file executables and even `.app` bundles for Mac)
-- **Build Binary Python Modules** - Build binary `*.pyd` modules that can be
-  imported into other python scripts
-- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app
-  bundles), and Linux
-- **GUI Support** - Supports GUIs made e.g. with tkinter and Qt ([PyQt6](https://pypi.org/project/PyQt6/), and [PySide6](https://pypi.org/project/PySide6/))
-- **Lots More!** - All the features of [Nuitka Python Compiler](https://nuitka.net) including support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding data files, and more (for those with a license).
+- **Build Standalone Executables** - Build an executable from your **Python** code (standalone
+  `*.exe` or `*.bin` file executables and even `.app` bundles for Mac)
+- **Build Binary Python Modules** - Build binary `*.pyd` modules that are importable by other
+  **Python** scripts
+- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
+- **GUI Support** - Supports GUIs made, for example, with **TkInter**\*\* and Qt
+  [PySide6](https://pypi.org/project/PySide6/)), and ([PyQt6](https://pypi.org/project/PyQt6/)
+- **Lots More!** - All the features of \[Nuitka [Python Compiler](https://nuitka.net), including
+  support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation,
+  embedding data files, and more (for those with a license).
 
 # Simple to Use
+
 See [Usage Details](#usage-details) below for more info.
-## 1) Create a python script
+
+## 1) Create a **Python** script
+
 ```python
 ## hello_world.py
 print("hello world!")
 ```
+
 Run it in python
+
 ```
 C:\> python hello_world.py
 hello world!
 ```
 
 ## 2) Build an executable
-Use this action as a step in one of your project's CI workflow jobs ([details below](#usage-details)):
+
+Use this action as a step in one of your project's CI workflow jobs
+([details below](#usage-details)):
+
 ```yaml
 # Build python script into a stand-alone exe
 - uses: Nuitka/Nuitka-Action@main
@@ -39,6 +48,7 @@ Use this action as a step in one of your project's CI workflow jobs ([details be
 ```
 
 ## 3) Run the executable
+
 ```
 C:\> hello_world.exe
 hello world!
@@ -46,28 +56,24 @@ hello world!
 
 ## Current Limitations
 
-- Not all Nuitka options are currently exposed as input parameters to this
-  action. We welcome PRs in case you find anything missing.
-
-- The version of the Nuitka package (and its dependencies) are currently hard-coded. Eventually, we'll add support for you to specify versions of these packages -- probably just by disabling installing these packages as part of the action so you can do it in your workflow.
-
-- Not many examples yet that demonstrate how to use this action in practice.
+- Not enough examples yet that demonstrate how to use this action in practice.
 
 # Some Example Projects
 
-| Project | Example Workflow (YAML) |
-| ---- | ---- |
+| Project                                                                           | Example Workflow (YAML)                                                                                                                                                             |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Node Editor GUI using Qt/Pyside6](https://github.com/jimkring/logic-node-editor) | [![Executable Build](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml/badge.svg)](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml) |
-| [Kasa TP-Link CLI App](https://github.com/jimkring/kasa-cli) | [![Build-All-Platforms](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml/badge.svg)](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml) |
+| [Kasa TP-Link CLI App](https://github.com/jimkring/kasa-cli)                      | [![Build-All-Platforms](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml/badge.svg)](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml)  |
 
 # Usage Details
 
-See [action.yml](action.yml) for details on how this action works under the
-hood. It is actually pretty simple.
+See [action.yml](action.yml) for details on how this action works under the hood. It is actually
+pretty simple.
 
 ## Build a python script into an exe
 
-See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for examples of this workflow in action.
+See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for
+examples of this workflow in action.
 
 ```yaml
 jobs:
@@ -104,8 +110,8 @@ jobs:
 
 ## GUI Builds
 
-Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-inter` to
-ensure that those libraries are included correctly.
+Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-inter` to ensure
+that those libraries are included correctly.
 
 ```yaml
 - name: Qt GUI with PySide6
@@ -129,9 +135,10 @@ ensure that those libraries are included correctly.
 
 ## Multi-Platform Builds
 
-To build for a given platform, just choose a runner of the appropriate operating system.  You can even build for multiple platforms in a single workflow using a matrix strategy, as shown below:
+Configure a runner of the appropriate operating system to build for a given platform. You can even
+do multiple platforms in a single workflow using a matrix strategy, as shown below:
 
-Here we see a workflow from the [jimkring/kasa-cli](https://github.com/jimkring/kasa-cli) project.
+Here is a workflow from the [jimkring/kasa-cli](https://github.com/jimkring/kasa-cli) project.
 
 ```yaml
 jobs:
@@ -186,7 +193,8 @@ You can see that it creates executable binaries for Mac, Linux, and Windows.
 
 ## Python and Package Dependencies
 
-This action installs the following **Python** packages specified by the [requirements.txt](requirements.txt) of this action repo.
+This action installs the following **Python** packages specified by the
+[requirements.txt](requirements.txt) of this action repo.
 
 ```
 ordered-set==4.1.0
@@ -198,9 +206,9 @@ zstandard==0.20.0
 
 ## Value syntax
 
-Since Action workflows accept no lists, for options that can be given multiple times
-we provide support for splitting arguments by newline, which allows you to give multiple
-values like this (new with Nuitka 2.0).
+Since Action workflows accept no list values, for options that in **Nuitka** can be given multiple
+times, there is support for splitting those arguments by newline, which allows you to specify
+multiple values like this.
 
 ```yaml
 include-data-dir: |
@@ -209,33 +217,38 @@ include-data-dir: |
   source_path_dir3=dest_path_dir3
 ```
 
-This works for all options that can be given multiple times on the command line.
-
 # Additional Documentation
 
-See [Nuitka](https://github.com/Nuitka/Nuitka) for full documentation on Nuitka. It's really a fantastic tool!
-
+See [Nuitka](https://github.com/Nuitka/Nuitka) for full documentation on Nuitka. It's a really
+fantastic tool!
 
 # License
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE).
+**Nuitka Action** scripts and documentation in this project are under the [MIT License](LICENSE).
 
-Nuitka is licensed under the [Apache 2.0 License](https://github.com/Nuitka/Nuitka/blob/develop/LICENSE.txt)
+**Nuitka** has the [Apache 2.0 License](https://github.com/Nuitka/Nuitka/blob/develop/LICENSE.txt)
 
-Python is licensed under the [Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
+**Python** has the
+[Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
 
 ## You are Responsible for Complying with your Project's Dependencies' Licenses
 
-This tool compiles and/or copies your project's package dependencies (and their dependencies) into the output executable, which will be considered a combined and/or derivative work of those packages.
+This tool compiles and copies your project's package dependencies (and their dependencies) into the
+output executable, which will be considered a combined or derivative work of those packages.
 
-> **_Important:_** You are responsible for compliance with the licenses of your project's package dependencies. Please consult with an attorney about your individual/project's compliance needs and strategy.
+> **_Important:_** You are responsible for compliance with the licenses of your project's package
+> dependencies. Please consult with an attorney about your individual/project's compliance needs and
+> strategy.
 
 ## How to Comply With Dependency Package Licenses
 
-There are some great license checker tools that you might consider integrating with your project. Generally speaking, they enable you to specify which licenses (or types) are approved or disapproved and alert you whenever your project has a package dependency that is not approved.
+There are some license checker tools that you might consider integrating with your project.
+Generally speaking, they enable you to specify which licenses (or types) are approved or disapproved
+and alert you whenever your project has a package dependency that is not approved.
 
-Here are a couple license checker tools:
+Here is a list of license checker tools:
 
-- [python-license-check](https://github.com/dhatim/python-license-check) - can be run as a GitHub pre-commit hook.
-- [dependencies-license-compliance-checker](https://github.com/marketplace/actions/dependencies-license-compliance-checker) - a github action that can be run before your executable build.
-
+- [python-license-check](https://github.com/dhatim/python-license-check) - can be run as a GitHub
+  pre-commit hook.
+- [dependencies-license-compliance-checker](https://github.com/marketplace/actions/dependencies-license-compliance-checker)
+  \- a github action that you can run before your executable build.
