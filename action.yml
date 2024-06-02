@@ -163,6 +163,11 @@ inputs:
       rather than on the inside. Makes only sense in case of '--onefile'
       compilation. First files have to be specified as included somehow,
       then this refers to target paths. Default empty.
+  include-raw-dir:
+    description: |
+      Include raw directories completely in the distribution. This is
+      recursive. Check '--include-data-dir' to use the sane option.
+      Default empty.
 
   ### Control the inclusion of modules and packages in result. ###
   include-package:
