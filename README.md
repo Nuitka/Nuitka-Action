@@ -79,10 +79,10 @@ jobs:
     steps:
 
       # Check-out repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Setup Python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
@@ -144,10 +144,10 @@ jobs:
 
     steps:
       - name: Check-out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
@@ -176,17 +176,17 @@ jobs:
             build/*.app/**/*
 ```
 
-And, here's what a resulting job run looks like:
+And here's what a resulting job run looks like:
 
 https://github.com/jimkring/kasa-cli/actions/runs/2682890462
 
 ![image](https://user-images.githubusercontent.com/381432/179555752-021fd3d6-3f33-4f5f-bc44-0461491813fc.png)
 
-You can see that executable binaries were created for Mac, Linux, and Windows.
+You can see that it creates executable binaries for Mac, Linux, and Windows.
 
 ## Python and Package Dependencies
 
-This action installs the following python packages (which are specified in the [requirements.txt](requirements.txt) of this action repo).
+This action installs the following **Python** packages specified by the [requirements.txt](requirements.txt) of this action repo.
 
 ```
 ordered-set==4.1.0
