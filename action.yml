@@ -265,6 +265,20 @@ inputs:
     description: |
       Trademark used in version information. Windows/macOS only at this time. Defaults to not present.
 
+  ### General OS controls ###
+  force-stdout-spec:
+    description: |
+      Force standard output of the program to go to this location. Useful for programs with
+      disabled console and programs using the Windows Services Plugin of Nuitka commercial.
+      Defaults to not active, use e.g. '{PROGRAM_BASE}.out.txt', i.e. file near your program,
+      check User Manual for full list of available values.
+  force-stderr-spec:
+    description: |
+      Force standard error of the program to go to this location. Useful for programs with
+      disabled console and programs using the Windows Services Plugin of Nuitka commercial.
+      Defaults to not active, use e.g. '{PROGRAM_BASE}.err.txt', i.e. file near your program,
+      check User Manual for full list of available values.
+
   ### Windows specific controls ###
   windows-console-mode:
     description: |
