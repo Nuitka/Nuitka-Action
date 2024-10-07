@@ -56,7 +56,15 @@ hello world!
 
 ## Current Limitations
 
-- Not enough examples yet that demonstrate how to use this action in practice.
+- Not enough examples yet that demonstrate how to use this action in practice. Please help proving
+  them.
+
+# Common traps
+
+- Uploading artifacts should make sure `include-hidden-files` is present or else incomplete folders
+  will be copied in case of `.libs` folders.
+
+- Onefile is actually the default right now and needs to be deactivated.
 
 # Some Example Projects
 
@@ -68,7 +76,7 @@ hello world!
 # Usage Details
 
 See [action.yml](action.yml) for details on how this action works under the hood. It is actually
-pretty simple.
+extremely simple.
 
 ## Build a python script into an exe
 
@@ -102,10 +110,11 @@ jobs:
 
       # Uploads artifact
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exe
           path: build/hello_world.exe
+          include-hidden-files: true
 ```
 
 ## GUI Builds
@@ -174,13 +183,14 @@ jobs:
           onefile: true
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }} Build
           path: |
             build/*.exe
             build/*.bin
             build/*.app/**/*
+          include-hidden-files: true
 ```
 
 And here's what a resulting job run looks like:
