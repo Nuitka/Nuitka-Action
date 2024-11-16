@@ -38,6 +38,7 @@ inputs:
       installation and depends on it. Standalone creates a folder
       with an executable contained to run it. Onefile creates a
       single executable to deploy. Default is 'accelerated'.
+    default: onefile
   standalone:
     description: |
       Enable standalone mode for output. This allows you to transfer the created binary
@@ -48,7 +49,6 @@ inputs:
     description: |
       On top of standalone mode, enable onefile mode. This means not a folder,
       but a compressed executable is created and used. Defaults to off.
-    default: true
   python-flag:
     description: |
       Python flags to use. Default is what you are using to run Nuitka, this
