@@ -68,10 +68,8 @@ hello world!
 
 # Some Example Projects
 
-| Project                                                                           | Example Workflow (YAML)                                                                                                                                                             |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Node Editor GUI using Qt/Pyside6](https://github.com/jimkring/logic-node-editor) | [![Executable Build](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml/badge.svg)](https://github.com/jimkring/logic-node-editor/actions/workflows/main.yml) |
-| [Kasa TP-Link CLI App](https://github.com/jimkring/kasa-cli)                      | [![Build-All-Platforms](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml/badge.svg)](https://github.com/jimkring/kasa-cli/actions/workflows/windows-exe.yml)  |
+- TODO: We need to add a repository demonstrating how to use the different
+  modes and typical applicates. Help is welcome
 
 # Usage Details
 
@@ -106,7 +104,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: hello_world.py
-          onefile: true
+          mode: onefile
 
       # Uploads artifact
       - name: Upload Artifact
@@ -128,7 +126,7 @@ that those libraries are included correctly.
   with:
     nuitka-version: main
     script-name: my_qt_gui_app.py
-    standalone: true
+    mode: standalone
     enable-plugins: pyside6
 ```
 
@@ -138,7 +136,7 @@ that those libraries are included correctly.
   with:
     nuitka-version: main
     script-name: my_tkinter_gui_app.py
-    standalone: true
+    mode: standalone
     enable-plugins: tk-inter
 ```
 
@@ -180,7 +178,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: kasa_cli
-          onefile: true
+          mode: onefile
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
