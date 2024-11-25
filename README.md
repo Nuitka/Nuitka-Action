@@ -64,12 +64,13 @@ hello world!
 - Uploading artifacts should make sure `include-hidden-files` is present or else incomplete folders
   will be copied in case of `.libs` folders.
 
-- Onefile is actually the default right now and needs to be deactivated.
+- For ``mode`` the value ``app`` is the default and needs to be switched. For
+  packages you need to use ``module``.
 
 # Some Example Projects
 
 - TODO: We need to add a repository demonstrating how to use the different
-  modes and typical applicates. Help is welcome
+  modes and typical applications. Help is welcome
 
 # Usage Details
 
@@ -78,14 +79,10 @@ extremely simple.
 
 ## Build a python script into an exe
 
-See [jimkring/test-nuitka-action/](https://github.com/jimkring/test-nuitka-action/actions) for
-examples of this workflow in action.
-
 ```yaml
 jobs:
 
   build:
-    # Windows is currently the only platform this action supports
     runs-on: windows-latest
 
     steps:
@@ -99,12 +96,12 @@ jobs:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
-      # Build python script into a stand-alone exe
+      # Build python script into a single execute or app folder (macOS)
       - uses: Nuitka/Nuitka-Action@main
         with:
           nuitka-version: main
           script-name: hello_world.py
-          mode: onefile
+          mode: app
 
       # Uploads artifact
       - name: Upload Artifact
@@ -145,8 +142,6 @@ that those libraries are included correctly.
 Configure a runner of the appropriate operating system to build for a given platform. You can even
 do multiple platforms in a single workflow using a matrix strategy, as shown below:
 
-Here is a workflow from the [jimkring/kasa-cli](https://github.com/jimkring/kasa-cli) project.
-
 ```yaml
 jobs:
   build:
@@ -178,7 +173,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: kasa_cli
-          mode: onefile
+          mode: app
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -191,13 +186,7 @@ jobs:
           include-hidden-files: true
 ```
 
-And here's what a resulting job run looks like:
-
-https://github.com/jimkring/kasa-cli/actions/runs/2682890462
-
-![image](https://user-images.githubusercontent.com/381432/179555752-021fd3d6-3f33-4f5f-bc44-0461491813fc.png)
-
-You can see that it creates executable binaries for Mac, Linux, and Windows.
+You will see that it creates executable binaries for Mac, Linux, and Windows.
 
 ## Python and Package Dependencies
 
