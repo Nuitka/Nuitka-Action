@@ -358,6 +358,12 @@ inputs:
     description: |
       Add executable icon for onefile binary to use. Can be given only one time. Defaults to Python icon if available.
 
+  ### Playwright specific controls: ###
+  playwright-include-browser:
+    description: |
+      Playwright browser to include by name. Can be specified multiple times. Use "all" to include all installed browsers or use "none" to exclude all browsers.
+
+
   ### data file embedding (commercial only) ###
   embed-data-files-compile-time-pattern:
     description: Pattern of data files to embed for use during compile time. These should match target filenames.
