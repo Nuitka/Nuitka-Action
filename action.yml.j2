@@ -34,12 +34,6 @@ inputs:
   ### Nuitka Plugins to enable. ###
 {{ get_group_options("Plugin control") }}
 
-  ### Include Qt Plugins. ###
-  include-qt-plugins:
-    description: "A comma separated list of Qt plugins, such as qml, etc."
-  noinclude-qt-plugins:
-    description: "A comma separated list of Qt plugins to not included, to take away from default."
-
   ### Nuitka Tracing/Reporting features
 {{ get_group_options("Tracing features") }}
 
@@ -103,32 +97,16 @@ inputs:
   ### Linux specific controls: ###
 {{ get_group_options("Linux specific controls") }}
 
-  ### data file embedding (commercial only) ###
-  embed-data-files-compile-time-pattern:
-    description: Pattern of data files to embed for use during compile time. These should match target filenames.
-  embed-data-files-run-time-pattern:
-    description: Pattern of data files to embed for use during run time. These should match target filenames.
-  embed-data-files-qt-resource-pattern:
-    description: Pattern of data files to embed for use with Qt at run time. These should match target filenames.
-  embed-debug-qt-resources:
-    description: For debugging purposes, print out information for Qt resources not found.
-
-  ### traceback encryption (commercial only) ###
-  encryption-key:
-    description: "The key to use."
-  encrypt-stdout:
-    description: "Apply encryption to standard output."
-  encrypt-stderr:
-    description: "Apply encryption to standard error."
 
   ### Backend C compiler choices. ###
 {{ get_group_options("Backend C compiler choice") }}
 
-  ### Debug features ###
+  ### Debug features. ###
 {{ get_group_options("Debug features") }}
 
+{{ get_plugin_options() }}
 
-  ### action controls: ###
+  ### Action controls ###
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
 

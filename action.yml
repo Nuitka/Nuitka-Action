@@ -77,12 +77,6 @@ inputs:
       --module-parameter=module.name-option-name=value
       Default empty.
 
-  ### Include Qt Plugins. ###
-  include-qt-plugins:
-    description: "A comma separated list of Qt plugins, such as qml, etc."
-  noinclude-qt-plugins:
-    description: "A comma separated list of Qt plugins to not included, to take away from default."
-
   ### Nuitka Tracing/Reporting features
   report:
     description: |
@@ -286,7 +280,6 @@ inputs:
       console will be used for outputs. With 'hide' a newly spawned console
       will be hidden and an already existing console will behave like
       'force'. Default is 'force'.
-
   windows-icon-from-ico:
     description: |
       Add executable icon. Can be given multiple times for different resolutions
@@ -361,23 +354,6 @@ inputs:
     description: |
       Add executable icon for onefile binary to use. Can be given only one time. Defaults to Python icon if available.
 
-  ### data file embedding (commercial only) ###
-  embed-data-files-compile-time-pattern:
-    description: Pattern of data files to embed for use during compile time. These should match target filenames.
-  embed-data-files-run-time-pattern:
-    description: Pattern of data files to embed for use during run time. These should match target filenames.
-  embed-data-files-qt-resource-pattern:
-    description: Pattern of data files to embed for use with Qt at run time. These should match target filenames.
-  embed-debug-qt-resources:
-    description: For debugging purposes, print out information for Qt resources not found.
-
-  ### traceback encryption (commercial only) ###
-  encryption-key:
-    description: "The key to use."
-  encrypt-stdout:
-    description: "Apply encryption to standard output."
-  encrypt-stderr:
-    description: "Apply encryption to standard error."
 
   ### Backend C compiler choices. ###
   clang:
@@ -417,7 +393,7 @@ inputs:
       value. Refer to gcc documentation for "-fcf-protection" for the
       details.
 
-  ### Debug features ###
+  ### Debug features. ###
   debug:
     description: |
       Executing all self checks possible to find errors in Nuitka, do not use for
@@ -454,8 +430,191 @@ inputs:
       options that use less memory. For use on embedded machines. Use this in
       case of out of memory problems. Defaults to off.
 
+  ### Plugin options of 'anti-bloat' (categories: core) ###
+  noinclude-setuptools-mode:
+    description: |
+      What to do if a 'setuptools' or import is encountered. This package can be big with
+      dependencies, and should definitely be avoided. Also handles 'setuptools_scm'.
+  noinclude-pytest-mode:
+    description: |
+      What to do if a 'pytest' import is encountered. This package can be big with
+      dependencies, and should definitely be avoided. Also handles 'nose' imports.
+  noinclude-unittest-mode:
+    description: |
+      What to do if a unittest import is encountered. This package can be big with
+      dependencies, and should definitely be avoided.
+  noinclude-pydoc-mode:
+    description: |
+      What to do if a pydoc import is encountered. This package use is mark of useless
+      code for deployments and should be avoided.
+  noinclude-IPython-mode:
+    description: |
+      What to do if a IPython import is encountered. This package can be big with
+      dependencies, and should definitely be avoided.
+  noinclude-dask-mode:
+    description: |
+      What to do if a 'dask' import is encountered. This package can be big with
+      dependencies, and should definitely be avoided.
+  noinclude-numba-mode:
+    description: |
+      What to do if a 'numba' import is encountered. This package can be big with
+      dependencies, and is currently not working for standalone. This package is
+      big with dependencies, and should definitely be avoided.
+  noinclude-default-mode:
+    description: |
+      This actually provides the default "warning" value for above options, and
+      can be used to turn all of these on.
+  noinclude-custom-mode:
+    description: |
+      What to do if a specific import is encountered. Format is module name,
+      which can and should be a top level package and then one choice, "error",
+      "warning", "nofollow", e.g. PyQt5:error.
 
-  ### action controls: ###
+  ### Plugin options of 'pmw-freezer' (categories: package-support) ###
+  include-pmw-blt:
+    description: |
+      Should 'Pmw.Blt' not be included, Default is to include it.
+  include-pmw-color:
+    description: |
+      Should 'Pmw.Color' not be included, Default is to include it.
+
+  ### Plugin options of 'tk-inter' (categories: package-support) ###
+  tk-library-dir:
+    description: |
+      The Tk library dir. Nuitka is supposed to automatically detect it, but you can
+      override it here. Default is automatic detection.
+  tcl-library-dir:
+    description: |
+      The Tcl library dir. See comments for Tk library dir.
+
+  ### Plugin options of 'pyside6' (same for 'pyside2', 'pyqt6', 'pyqt5' plugins) (categories: package-support, qt-binding) ###
+  include-qt-plugins:
+    description: |
+      Which Qt plugins to include. These can be big with dependencies, so
+      by default only the "sensible" ones are included, but you can also put
+      "all" or list them individually. If you specify something that does
+      not exist, a list of all available will be given.
+  noinclude-qt-plugins:
+    description: |
+      Which Qt plugins to not include. This removes things, so you can
+      ask to include "all" and selectively remove from there, or even
+      from the default sensible list.
+  noinclude-qt-translations:
+    description: |
+      Include Qt translations with QtWebEngine if used. These can be a lot
+      of files that you may not want to be included.
+
+  ### Plugin options of 'upx' (categories: integration) ###
+  upx-binary:
+    description: |
+      The UPX binary to use or the directory it lives in, by default `upx` from PATH is used.
+  upx-disable-cache:
+    description: |
+      Do not cache UPX compression result, by default DLLs are cached, exe files are not.
+
+  ### Plugin options of 'anti-debugger' (categories: commercial, protection) ###
+  anti-debugger-debugging:
+    description: |
+      Enables debug outputs for the debugger plugin, so that it e.g. says
+      why it rejects something.
+
+  ### Plugin options of 'automatic-updates' (categories: commercial, feature) ###
+  auto-update-url-spec:
+    description: |
+      URL to check for automatic updates. Default empty, i.e. not updates.
+  auto-update-debug:
+    description: |
+      Debug automatic updates at runtime printing messages. Default False.
+
+  ### Plugin options of 'data-hiding' (categories: commercial, protection) ###
+  data-hiding-salt-value:
+    description: |
+      Salt value to make encryption result unique.
+
+  ### Plugin options of 'datafile-inclusion-ng' (categories: commercial, protection) ###
+  embed-data-files-compile-time-pattern:
+    description: |
+      Pattern of data files to embed for use during compile time. These should
+      match target filenames.
+  embed-data-files-run-time-pattern:
+    description: |
+      Pattern of data files to embed for use during run time. These should
+      match target filenames.
+  embed-data-files-qt-resource-pattern:
+    description: |
+      Pattern of data files to embed for use with Qt at run time. These should
+      match target filenames.
+  embed-debug-qt-resources:
+    description: |
+      For debugging purposes, print out information for Qt resources not found.
+
+  ### Plugin options of 'signing' (categories: commercial, integration) ###
+  windows-signing-tool:
+    description: |
+      The 'signtool' executable. You may make this a wrapper script should you want very
+      specific options, by default `signtool` from PATH or used MSVC used is used.
+  windows-certificate-name:
+    description: |
+      Name of the certificate to use. This will be used to sign the binary.
+  windows-certificate-sha1:
+    description: |
+      Checksum of the certificate to use. This will be used to sign the binary.
+  windows-certificate-filename:
+    description: |
+      Filename of the certificate, typically a ".pfx" file. This will be used to sign
+      the binary.
+  windows-certificate-password:
+    description: |
+      Password of the certificate filename used. Defaults to empty, must be
+      provided to successfully sign if certificate file has one.
+  windows-signed-content-comment:
+    description: |
+      Comment to be used for the signed comments. Optional, defaults to not given.
+
+  ### Plugin options of 'traceback-encryption' (categories: commercial, protection) ###
+  encryption-key:
+    description: |
+      The encryption key to use.
+  encrypt-stdout:
+    description: |
+      Apply encryption to standard output.
+  encrypt-stderr:
+    description: |
+      Apply encryption to standard error.
+  encrypt-debug-init:
+    description: |
+      In case the encryption fails to install, do not abort, but run normally and trace error unencrypted.
+  encrypt-crypto-package:
+    description: |
+      These are two very similar packages that can both do the encryption, and
+      to avoid duplication in case one of your packages requires the other,
+      you get to select which one to use by the plugin code. By default
+      "pycryptodomex" is used and only legacy code uses that. However it
+      will fallback to "pycryptodome" if that's the only one installed,
+      and you can enforce Nuitka choice if both are for some reason.
+
+  ### Plugin options of 'windows-service' (categories: commercial, feature) ###
+  windows-service-name:
+    description: |
+      The Windows service name.
+  windows-service-grace-time:
+    description: |
+      For shutdown, wait this extra time before killing. Unit is ms, and default is 2000,
+      i.e. it waits 2 seconds to allow cleanup. Increase if you need more time, decrease
+      if you want faster service shutdown.
+  windows-service-start-mode:
+    description: |
+      Pick the service start mode, value "auto" starts automatically at
+      reboot without login, "demand" (default) must be started manually,
+      and "disabled" cannot be started, requires further action to
+      change it.
+  windows-service-cli:
+    description: |
+      Should the program allow to be ran from the command line. By default
+      it does not and only outputs a message it is disallowed.
+
+
+  ### Action controls ###
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
 

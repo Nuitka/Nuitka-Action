@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import textwrap
 
-from nuitka.OptionParsing import SUPPRESS_HELP, parser
+from nuitka.containers.OrderedSets import OrderedSet
 from nuitka.utils.CommandLineOptions import OurOptionParser
 from nuitka.utils.FileOperations import changeTextFileContents
 from nuitka.utils.Jinja2 import getTemplate
@@ -16,8 +17,25 @@ template = getTemplate(
 )
 
 
+parser = None
+
+
+def _getParser():
+    global parser
+
+    if parser is None:
+        sys.argv.append("--help-all")
+        from nuitka.OptionParsing import parser
+        from nuitka.plugins.Plugins import addStandardPluginCommandLineOptions
+
+        addStandardPluginCommandLineOptions(parser=parser, plugin_help_mode=True)
+        del sys.argv[-1]
+
+    return parser
+
+
 def getOptions():
-    for option in parser.iterateOptions():
+    for option in _getParser().iterateOptions():
         # Help option
         if "--help" in option._long_opts:
             continue
@@ -33,6 +51,8 @@ def getOptions():
         if not option.require_compiling or not option.github_action:
             continue
 
+        from nuitka.OptionParsing import SUPPRESS_HELP
+
         if option.help is SUPPRESS_HELP:
             continue
 
@@ -46,6 +66,7 @@ def getTopOptions():
         if isinstance(container, OurOptionParser):
             yield option
 
+
 def getGroupOptions(group_name):
     for option in getOptions():
         container = getattr(option, "container", None)
@@ -56,16 +77,25 @@ def getGroupOptions(group_name):
         if container.title == group_name:
             yield option
 
+
 def formatOption(option):
+    help_str = option.help
+    if help_str.startswith("[REQUIRED]"):
+        help_str = help_str[11:]
+
+    assert not help_str[-1].isspace(), option
+
     result = (
         option._long_opts[0].lstrip("-")
         + ":\n  description: |\n"
-        + textwrap.indent(option.help, prefix="    ")
+        + textwrap.indent(help_str, prefix="    ")
     )
 
     if option.github_action_default is not None:
         if type(option.github_action_default) is bool:
-            option.github_action_default = "true" if option.github_action_default else "false"
+            option.github_action_default = (
+                "true" if option.github_action_default else "false"
+            )
 
         assert type(option.github_action_default) is str, option
         result += "\n  default: " + option.github_action_default
@@ -81,6 +111,7 @@ def get_top_options():
 
     return textwrap.indent("\n".join(result), "  ")
 
+
 def get_group_options(group_caption):
     result = []
 
@@ -89,7 +120,43 @@ def get_group_options(group_caption):
 
     return textwrap.indent("\n".join(result), "  ")
 
-action_yaml = template.render(get_top_options=get_top_options, get_group_options=get_group_options,)
+
+def get_plugin_options():
+    plugin_groups = OrderedSet()
+
+    for option in getOptions():
+        container = getattr(option, "container", None)
+        if isinstance(container, OurOptionParser):
+            continue
+
+        # TODO: No support for Nuitka VM yet.
+        if "pelock" in container.title or "themida" in container.title:
+            continue
+
+        if container.title.startswith("Plugin options of "):
+            plugin_groups.add(container)
+
+    result = []
+
+    for option_group in plugin_groups:
+        result.append("### %s ###" % option_group.title)
+
+        for option in option_group.option_list:
+            if not option.github_action:
+                continue
+
+            result.append(formatOption(option))
+
+        result.append("")
+
+    return textwrap.indent("\n".join(result), "  ")
+
+
+action_yaml = template.render(
+    get_top_options=get_top_options,
+    get_group_options=get_group_options,
+    get_plugin_options=get_plugin_options,
+)
 
 if changeTextFileContents("action.yml", action_yaml):
     print("Updated.")
