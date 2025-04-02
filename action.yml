@@ -35,7 +35,10 @@ inputs:
       installation and depends on it. Standalone creates a folder
       with an executable contained to run it. Onefile creates a
       single executable to deploy. App is onefile except on macOS
-      where it's not to be used. Default is 'accelerated'.
+      where it's not to be used. Module makes a module, and
+      package includes also all sub-modules and sub-packages. Dll
+      is currently under development and not for users yet.
+      Default is 'accelerated'.
     default: app
   python-flag:
     description: |
@@ -358,12 +361,6 @@ inputs:
     description: |
       Add executable icon for onefile binary to use. Can be given only one time. Defaults to Python icon if available.
 
-  ### Playwright specific controls: ###
-  playwright-include-browser:
-    description: |
-      Playwright browser to include by name. Can be specified multiple times. Use "all" to include all installed browsers or use "none" to exclude all browsers.
-
-
   ### data file embedding (commercial only) ###
   embed-data-files-compile-time-pattern:
     description: Pattern of data files to embed for use during compile time. These should match target filenames.
@@ -430,6 +427,11 @@ inputs:
       Disable check normally done with "--debug". With Python3.12+ do not check known
       immortal object assumptions. Some C libraries corrupt them. Defaults to check
       being made if "--debug" is on.
+  no-debug-c-warnings:
+    description: |
+      Disable check normally done with "--debug". The C compilation may produce
+      warnings, which it often does for some packages without these being issues,
+      esp. for unused values.
   unstripped:
     description: |
       Keep debug info in the resulting object file for better debugger interaction.
