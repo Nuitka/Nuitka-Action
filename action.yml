@@ -31,13 +31,13 @@ inputs:
   ### Nuitka Modes ###
   mode:
     description: |
-      Mode in which to compile. Accelerated runs in your Python
-      installation and depends on it. Standalone creates a folder
-      with an executable contained to run it. Onefile creates a
-      single executable to deploy. App is onefile except on macOS
-      where it's not to be used. Module makes a module, and
-      package includes also all sub-modules and sub-packages. Dll
-      is currently under development and not for users yet.
+      Mode in which to compile. "accelerated" runs in your Python
+      installation and depends on it. "standalone" creates a folder
+      with an executable contained to run it. "onefile" creates a
+      single self extracting executable to deploy. "app" is "onefile"
+      except on macOS. "module" makes a module from a single module
+      and "package" includes also all sub-modules and sub-packages.
+      "dll" is currently under development and not for users yet.
       Default is 'accelerated'.
     default: app
   python-flag:
@@ -61,6 +61,11 @@ inputs:
     description: |
       Enabled plugins. Must be plug-in names. Use '--plugin-list' to query the
       full list and exit. Default empty.
+  disable-plugins:
+    description: |
+      Disabled plugins. Must be plug-in names. Use '--plugin-list' to query the
+      full list and exit. Most standard plugins are not a good idea to disable.
+      Default empty.
   user-plugin:
     description: |
       The file name of user plugin. Can be given multiple times. Default empty.
