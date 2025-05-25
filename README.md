@@ -10,7 +10,8 @@ the amazingly compatible [nuitka](https://github.com/Nuitka/Nuitka) Python compi
 - **Build Binary Python Modules** - Build binary `*.pyd` modules that are importable by other
   **Python** scripts
 - **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
-- **GUI Support** - Supports GUIs made, for example, with TkInter, [PySide6](https://pypi.org/project/PySide6/), and [PyQt6](https://pypi.org/project/PyQt6/)
+- **GUI Support** - Supports GUIs made, for example, with TkInter,
+  [PySide6](https://pypi.org/project/PySide6/), and [PyQt6](https://pypi.org/project/PyQt6/)
 - **Lots More!** - All the features of \[Nuitka [Python Compiler](https://nuitka.net), including
   support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation,
   embedding data files, and more (for those with a license).
@@ -63,13 +64,13 @@ hello world!
 - Uploading artifacts should make sure `include-hidden-files` is present or else incomplete folders
   will be copied in case of `.libs` folders.
 
-- For ``mode`` the value ``app`` is the default and needs to be switched. For
-  packages you need to use ``module``.
+- For `mode` the value `app` is the default and needs to be switched. For packages you need to use
+  `module`.
 
 # Some Example Projects
 
-- TODO: We need to add a repository demonstrating how to use the different
-  modes and typical applications. Help is welcome
+- TODO: We need to add a repository demonstrating how to use the different modes and typical
+  applications. Help is welcome
 
 # Usage Details
 
@@ -182,6 +183,7 @@ jobs:
             build/*.exe
             build/*.bin
             build/*.app/**/*
+            build/*.dist/**/*
           include-hidden-files: true
 ```
 
