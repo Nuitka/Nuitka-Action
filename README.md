@@ -1,26 +1,31 @@
-# Python-to-Executable-Or-Module
+# Nuitka-Action
 
 This GitHub Action builds Windows, Mac, and Linux programs and extension modules from Python using
-the amazingly compatible [nuitka](https://github.com/Nuitka/Nuitka) Python compiler.
+the highly compatible [Nuitka](https://github.com/Nuitka/Nuitka) Python compiler.
 
 ## Key Features
 
-- **Build Standalone Executables** - Build an executable from your **Python** code (standalone
-  `*.exe` or `*.bin` file executables and even `.app` bundles for Mac)
-- **Build Binary Python Modules** - Build binary `*.pyd` modules that are importable by other
-  **Python** scripts
-- **Mac, Linux, and Windows** - Support for Windows, Mac (including .app bundles), and Linux
-- **GUI Support** - Supports GUIs made, for example, with TkInter,
-  [PySide6](https://pypi.org/project/PySide6/), and [PyQt6](https://pypi.org/project/PyQt6/)
-- **Lots More!** - All the features of \[Nuitka [Python Compiler](https://nuitka.net), including
-  support for [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation,
-  embedding data files, and more (for those with a license).
+- **Standalone Executables**: Compile your **Python** code into standalone executables (`*.exe` or
+  `*.bin` files, and `.app` bundles for Mac).
+- **Binary Python Modules**: Create binary `*.pyd` modules that can be imported by other **Python**
+  scripts. This is useful for distributing parts of your Python project as compiled libraries.
+- **Cross-Platform Compatibility**: Build for Windows, macOS (including `.app` bundles), and Linux
+  from a single workflow.
+- **GUI Framework Support**: Seamlessly compile applications using popular GUI frameworks such as
+  TkInter, [PySide6](https://pypi.org/project/PySide6/), and
+  [PyQt6](https://pypi.org/project/PyQt6/).
+- **Comprehensive Nuitka Features**: Leverage the full power of the
+  [Nuitka Python Compiler](https://nuitka.net), including support for
+  [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding
+  data files, and more support for
+  [Nuitka Commercial Features](https://nuitka.net/doc/commercial.html) like obfuscation, embedding
+  data files, and more (for those with a license).
 
-# Simple to Use
+## Simple to Use
 
 See [Usage Details](#usage-details) below for more info.
 
-## 1) Create a **Python** script
+### 1) Create a **Python** script
 
 ```python
 ## hello_world.py
@@ -34,7 +39,7 @@ C:\> python hello_world.py
 hello world!
 ```
 
-## 2) Build an executable
+### 2) Build an executable
 
 Use this action as a step in one of your project's CI workflow jobs
 ([details below](#usage-details)):
@@ -47,7 +52,7 @@ Use this action as a step in one of your project's CI workflow jobs
     script-name: hello_world.py
 ```
 
-## 3) Run the executable
+### 3) Run the executable
 
 ```
 C:\> hello_world.exe
@@ -56,10 +61,10 @@ hello world!
 
 ## Current Limitations
 
-- Not enough examples yet that demonstrate how to use this action in practice. Please help proving
-  them.
+- There are not enough examples yet that demonstrate how to use this action in practice.
+  Please help proving them. But everything that's possible with **Nuitka** should work just fine doing it in a workflow with this Action.
 
-# Common traps
+## Common traps
 
 - Uploading artifacts should make sure `include-hidden-files` is present or else incomplete folders
   will be copied in case of `.libs` folders.
@@ -67,17 +72,17 @@ hello world!
 - For `mode` the value `app` is the default and needs to be switched. For packages you need to use
   `module`.
 
-# Some Example Projects
+## Some Example Projects
 
 - TODO: We need to add a repository demonstrating how to use the different modes and typical
   applications. Help is welcome
 
-# Usage Details
+## Usage Details
 
 See [action.yml](action.yml) for details on how this action works under the hood. It is actually
 extremely simple.
 
-## Build a python script into an exe
+### Build a python script into an exe
 
 ```yaml
 jobs:
@@ -112,7 +117,7 @@ jobs:
           include-hidden-files: true
 ```
 
-## GUI Builds
+### GUI Builds
 
 Similar to the others, but with `enable-plugins: pyside6` or `enable-plugins:tk-inter` to ensure
 that those libraries are included correctly.
@@ -137,7 +142,7 @@ that those libraries are included correctly.
     enable-plugins: tk-inter
 ```
 
-## Multi-Platform Builds
+### Multi-Platform Builds
 
 Configure a runner of the appropriate operating system to build for a given platform. You can even
 do multiple platforms in a single workflow using a matrix strategy, as shown below:
@@ -189,7 +194,7 @@ jobs:
 
 You will see that it creates executable binaries for Mac, Linux, and Windows.
 
-## Python and Package Dependencies
+### Python and Package Dependencies
 
 This action installs the following **Python** packages specified by the
 [requirements.txt](requirements.txt) of this action repo.
@@ -202,7 +207,7 @@ wheel==0.38.4
 zstandard==0.20.0
 ```
 
-## Value syntax
+### Value syntax
 
 Since Action workflows accept no list values, for options that in **Nuitka** can be given multiple
 times, there is support for splitting those arguments by newline, which allows you to specify
@@ -215,12 +220,12 @@ include-data-dir: |
   source_path_dir3=dest_path_dir3
 ```
 
-# Additional Documentation
+## Additional Documentation
 
 See [Nuitka](https://github.com/Nuitka/Nuitka) for full documentation on Nuitka. It's a really
 fantastic tool!
 
-# License
+## License
 
 **Nuitka Action** scripts and documentation in this project are under the [MIT License](LICENSE).
 
@@ -229,7 +234,7 @@ fantastic tool!
 **Python** has the
 [Python Software Foundation (PSF) License](https://github.com/python/cpython/blob/main/LICENSE).
 
-## You are Responsible for Complying with your Project's Dependencies' Licenses
+### You are Responsible for Complying with your Project's Dependencies' Licenses
 
 This tool compiles and copies your project's package dependencies (and their dependencies) into the
 output executable, which will be considered a combined or derivative work of those packages.
@@ -238,7 +243,7 @@ output executable, which will be considered a combined or derivative work of tho
 > dependencies. Please consult with an attorney about your individual/project's compliance needs and
 > strategy.
 
-## How to Comply With Dependency Package Licenses
+### How to Comply With Dependency Package Licenses
 
 There are some license checker tools that you might consider integrating with your project.
 Generally speaking, they enable you to specify which licenses (or types) are approved or disapproved
