@@ -3,8 +3,8 @@
 ###############
 
 This GitHub Action builds **Windows**, **macOS**, and **Linux** programs
-and extension modules from **Python** using the highly compatible `Nuitka
-<https://github.com/Nuitka/Nuitka>`_ Python compiler.
+and extension modules from **Python** using the highly compatible
+`Nuitka <https://github.com/Nuitka/Nuitka>`_ Python compiler.
 
 **************
  Key Features
@@ -214,7 +214,7 @@ using a matrix strategy, as shown below:
            uses: Nuitka/Nuitka-Action@main
            with:
              nuitka-version: main
-             script-name: kasa_cli
+             script-name: your_script.py
              mode: app
 
          - name: Upload Artifacts
