@@ -110,6 +110,11 @@ inputs:
   disable-cache:
     description: "Disables caching of compiled binaries. Defaults to false."
 
+  caching-key:
+    description: "An optional string to make the Nuitka build cache key more specific. This can be used for manual cache invalidation or to segment caches based on custom criteria. This key itself is not passed to Nuitka."
+    required: false
+    default: ""
+
 {% raw %}
 runs:
   using: "composite"
@@ -151,11 +156,15 @@ runs:
           ${{ runner.os }}-${{ runner.arch }}-
 
     - name: Build with Nuitka
-      env:
-        NUITKA_WORKFLOW_INPUTS: ${{ toJson(inputs) }}
       shell: bash
       run: |
         set -e
+
+        # Prepare the JSON string for Nuitka, filtering out action-specific keys using Python
+        NUITKA_WORKFLOW_INPUTS=$(echo '${{ toJson(inputs) }}' | python -c "import sys, json; data = json.load(sys.stdin); [data.pop(k, None) for k in ['nuitka-version', 'working-directory', 'access-token', 'disable-cache', 'caching-key']]; json.dump(data, sys.stdout)")
+
+        # Pass the filtered JSON to Nuitka via an environment variable
+        export NUITKA_WORKFLOW_INPUTS
         python -m nuitka --github-workflow-options
       working-directory: ${{ inputs.working-directory }}
 {% endraw %}
