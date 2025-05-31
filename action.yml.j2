@@ -26,7 +26,12 @@ inputs:
 
   # Enable Nuitka Commercial features of Nuitka using a PAT (personal access token)
   access-token:
-    description: "Github personal access token of an account authorized to access the Nuitka-commercial repo"
+    description: "GitHub personal access token of an account authorized to access the Nuitka-commercial repo"
+
+  caching-key:
+    description: "GitHub caching key, use this if you run multiple very different compilations."
+    default: "standard"
+
 
   ### Nuitka Modes ###
 {{ get_top_options() }}
@@ -144,7 +149,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ${{ env.NUITKA_CACHE_DIR }}
-        key: ${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
+        key: ${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-
           ${{ runner.os }}-${{ runner.arch }}-python-
