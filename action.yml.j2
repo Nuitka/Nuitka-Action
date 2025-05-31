@@ -133,9 +133,6 @@ runs:
         fi
 
         pip install "${repo_url}/@${{ inputs.nuitka-version }}#egg=nuitka"
-
-        # Needed to filter JSON for passing to Nuitka.
-        sudo apt-get install -y jq
     - name: Install ccache
       # TODO: Proper "in" test could make sense here.
       if: ${{ inputs.disable-cache != 'ccache' && runner.os == 'Linux' }}
@@ -154,20 +151,11 @@ runs:
           ${{ runner.os }}-${{ runner.arch }}-
 
     - name: Build with Nuitka
+      env:
+        NUITKA_WORKFLOW_INPUTS: ${{ toJson(inputs) }}
       shell: bash
       run: |
         set -e
-
-        # Prepare the JSON string for Nuitka, filtering out action-specific keys
-        NUITKA_WORKFLOW_INPUTS=$(echo '${{ toJson(inputs) }}' | jq 'del(
-          .["nuitka-version"],
-          .["working-directory"],
-          .["access-token"],
-          .["disable-cache"],
-          .["caching-key"]
-        )')
-
-        # Pass the filtered JSON to Nuitka via an environment variable
-        export NUITKA_WORKFLOW_INPUTS
         python -m nuitka --github-workflow-options
+      working-directory: ${{ inputs.working-directory }}
 {% endraw %}
