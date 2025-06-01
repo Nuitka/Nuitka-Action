@@ -149,7 +149,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ${{ env.NUITKA_CACHE_DIR }}
-        key: ${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
+        key: ${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-
           ${{ runner.os }}-${{ runner.arch }}-python-
