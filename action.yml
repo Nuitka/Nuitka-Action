@@ -354,6 +354,14 @@ inputs:
       an access right, then the informative text. Legal values can be found on
       https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and
       the option can be specified multiple times. Default empty.
+  macos-sign-keyring-filename:
+    description: |
+      Path to the certificate file to be used for macOS code signing.
+      This is used in conjunction with '--macos-sign-identity'. Default empty.
+  macos-sign-keyring-password:
+    description: |
+      Password for the certificate file provided via
+      '--macos-sign-keyring-filename'. Default empty.
 
   ### Linux specific controls: ###
   linux-icon:
