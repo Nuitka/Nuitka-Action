@@ -636,7 +636,7 @@ inputs:
   caching-key:
     description: "An optional string to make the Nuitka build cache key more specific. This can be used for manual cache invalidation or to segment caches based on custom criteria. This key itself is not passed to Nuitka."
     required: false
-    default: ""
+    default: "caching"
 
 
 runs:
