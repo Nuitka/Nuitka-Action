@@ -688,11 +688,13 @@ runs:
 
     - name: Build with Nuitka
       shell: bash
+      env:
+        PYTHONUTF8: 1
       run: |
         set -e
 
         # Prepare the JSON string for Nuitka, filtering out action-specific keys using Python
-        NUITKA_WORKFLOW_INPUTS=$(echo '${{ toJson(inputs) }}' | python -c "import sys, json; data = json.load(sys.stdin); [data.pop(k, None) for k in ['nuitka-version', 'working-directory', 'access-token', 'disable-cache', 'caching-key']]; json.dump(data, sys.stdout)")
+        NUITKA_WORKFLOW_INPUTS=$(echo '${{ toJson(inputs) }}' | python -c "import sys, json; data = json.load(sys.stdin); [data.pop(k, None) for k in ['nuitka-version', 'working-directory', 'access-token', 'disable-cache', 'caching-key']]; json.dump(data, sys.stdout, ensure_ascii=False)")
 
         # Pass the filtered JSON to Nuitka via an environment variable
         export NUITKA_WORKFLOW_INPUTS
