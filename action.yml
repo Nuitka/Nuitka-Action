@@ -35,8 +35,10 @@ inputs:
       installation and depends on it. "standalone" creates a folder
       with an executable contained to run it. "onefile" creates a
       single self extracting executable to deploy. "app" is "onefile"
-      except on macOS. "module" makes a module from a single module
-      and "package" includes also all sub-modules and sub-packages.
+      except on macOS where it creates an app bundle. "app-dist" is
+      "standalone" except on macOS where it creates an app bundle.
+      "module" makes an extension module from a single module and
+      "package" compiles a whole package into an extension module.
       "dll" is currently under development and not for users yet.
       Default is 'accelerated'.
     default: app
@@ -154,7 +156,7 @@ inputs:
       the target filename, not source paths. So to ignore a file pattern from package
       data for 'package_name' should be matched as 'package_name/*.txt'. Or for the
       whole directory simply use 'package_name'. Default empty.
-  include-onefile-external-data:
+  include-data-files-external:
     description: |
       Include the specified data file patterns outside of the onefile binary,
       rather than on the inside. Makes only sense in case of '--onefile'
@@ -327,10 +329,14 @@ inputs:
   macos-app-mode:
     description: |
       Mode of application for the application bundle. When launching a Window, and appearing
-      in Docker is desired, default value "gui" is a good fit. Without a Window ever, the
+      in the dock is desired, default value "gui" is a good fit. Without a Window ever, the
       application is a "background" application. For UI elements that get to display later,
-      "ui-element" is in-between. The application will not appear in dock, but get full
+      "ui-element" is in-between. The application will not appear in the dock, but get full
       access to desktop when it does open a Window later.
+  macos-prohibit-multiple-instances:
+    description: |
+      For application bundles, set the flag "LSMultipleInstancesProhibited" to prevent
+      launching multiple instances of the application. Default is off.
   macos-sign-identity:
     description: |
       When signing on macOS, by default an ad-hoc identify will be used, but with this
@@ -352,8 +358,8 @@ inputs:
       requests access to the microphone and provides an informative text for
       the user, why that is needed. Before the colon, is an OS identifier for
       an access right, then the informative text. Legal values can be found on
-      https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources and
-      the option can be specified multiple times. Default empty.
+      https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources
+      and the option can be specified multiple times. Default empty.
   macos-sign-keyring-filename:
     description: |
       Path to the certificate file to be used for macOS code signing.
