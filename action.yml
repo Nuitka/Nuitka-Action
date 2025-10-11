@@ -595,7 +595,7 @@ inputs:
   windows-certificate-password:
     description: |
       Password of the certificate filename used. Defaults to empty, must be
-      provided to successfully sign if certificate file has one.
+      provided to successfully sign if certificate the file has one.
   windows-signed-content-comment:
     description: |
       Comment to be used for the signed comments. Optional, defaults to not given.
