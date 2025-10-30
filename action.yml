@@ -689,8 +689,8 @@ runs:
         key: nuitka-${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
         restore-keys: |
           nuitka-${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-
-          nuitka-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-
-          nuitka-${{ runner.os }}-${{ runner.arch }}-
+          nuitka-${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-
+          nuitka-${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-
 
     - name: Build with Nuitka
       shell: bash
