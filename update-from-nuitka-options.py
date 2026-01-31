@@ -5,7 +5,7 @@ import sys
 import textwrap
 
 from nuitka.containers.OrderedSets import OrderedSet
-from nuitka.utils.CommandLineOptions import OurOptionParser
+from nuitka.options.CommandLineOptionsTools import OurOptionParser
 from nuitka.utils.FileOperations import changeTextFileContents
 from nuitka.utils.Jinja2 import getTemplate
 
@@ -25,7 +25,7 @@ def _getParser():
 
     if parser is None:
         sys.argv.append("--help-all")
-        from nuitka.OptionParsing import parser
+        from nuitka.options.OptionParsing import parser
         from nuitka.plugins.Plugins import addStandardPluginCommandLineOptions
 
         addStandardPluginCommandLineOptions(parser=parser, plugin_help_mode=True)
@@ -51,7 +51,7 @@ def getOptions():
         if not option.require_compiling or not option.github_action:
             continue
 
-        from nuitka.OptionParsing import SUPPRESS_HELP
+        from nuitka.options.OptionParsing import SUPPRESS_HELP
 
         if option.help is SUPPRESS_HELP:
             continue
