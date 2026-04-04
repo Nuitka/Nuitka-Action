@@ -56,6 +56,9 @@ inputs:
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
+  ### Environment control ###
+{{ get_group_options("Environment control") }}
+
   ### Onefile behavior details ###
   onefile-tempdir-spec:
     description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."

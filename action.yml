@@ -189,6 +189,11 @@ inputs:
   user-package-configuration-file:
     description: "User provided YAML file with package configuration. You can include DLLs, remove bloat, add hidden dependencies. Check User Manual for a complete description of the format to use. Can be given multiple times. Defaults to empty."
 
+  ### Environment control ###
+  force-runtime-environment-variable:
+    description: |
+      Force an environment variables to a given value. Default empty.
+
   ### Onefile behavior details ###
   onefile-tempdir-spec:
     description: "Use this as a folder to unpack onefile. Defaults to '%TEMP%\\onefile_%PID%_%TIME%', but e.g. '%CACHE_DIR%/%COMPANY%/%PRODUCT%/%VERSION%' would be cached and good too."
@@ -412,6 +417,10 @@ inputs:
       Specify the allowed number of parallel C compiler jobs. Negative values
       are system CPU minus the given value. Defaults to the full system CPU
       count unless low memory mode is activated, then it defaults to 1.
+  reproducible:
+    description: |
+      Enable reproducible builds. Allowed values are "yes", "no", and "auto"
+      (where it's "no" on Windows and "yes" otherwise). Defaults to "auto".
   lto:
     description: |
       Use link time optimizations (MSVC, gcc, clang). Allowed values are
@@ -477,6 +486,9 @@ inputs:
   auto-update-debug:
     description: |
       Debug automatic updates at runtime printing messages. Default False.
+  auto-update-toml-file:
+    description: |
+      Path to generate a TOML update config for the compiled binary. Default empty, i.e. do not generate.
 
   ### Plugin options of 'windows-service' (categories: commercial, feature) ###
   windows-service-name:
