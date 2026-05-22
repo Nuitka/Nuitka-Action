@@ -149,8 +149,8 @@ runs:
         sudo apt-get install -y ccache
     - name: Cache Nuitka cache directory
       if: ${{ !inputs.disable-cache }}
-      uses: actions/cache@v5
-      with:
+{% endraw %}      uses: {{ resolve_action_ref('actions/cache@v5') }}
+{% raw %}      with:
         path: ${{ env.NUITKA_CACHE_DIR }}
         key: nuitka-${{ inputs.caching-key }}-${{ runner.os }}-${{ runner.arch }}-python-${{ env.PYTHON_VERSION }}-nuitka-${{ github.sha }}
         restore-keys: |

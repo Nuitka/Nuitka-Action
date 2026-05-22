@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 import sys
 import textwrap
 
@@ -8,6 +9,67 @@ from nuitka.containers.OrderedSets import OrderedSet
 from nuitka.options.CommandLineOptionsTools import OurOptionParser
 from nuitka.utils.FileOperations import changeTextFileContents
 from nuitka.utils.Jinja2 import getTemplate
+
+def _resolve_via_git(owner, repo, tag):
+    repo_url = f"https://github.com/{owner}/{repo}.git"
+
+    try:
+        result = subprocess.run(
+            ["git", "ls-remote", "--tags", repo_url, tag],
+            capture_output=True, text=True, timeout=15,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return None, None
+
+    sha = None
+    for line in result.stdout.strip().split("\n"):
+        if not line:
+            continue
+        s, ref = line.split("\t")
+        if ref == f"refs/tags/{tag}":
+            sha = s
+            break
+
+    if not sha:
+        return None, None
+
+    try:
+        result = subprocess.run(
+            ["git", "ls-remote", "--tags", repo_url],
+            capture_output=True, text=True, timeout=15,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return None, None
+
+    version = None
+    version_prefix = f"{tag}."
+    for line in result.stdout.strip().split("\n"):
+        if not line:
+            continue
+        s, ref = line.split("\t")
+        ref_name = ref.rsplit("/", 1)[-1]
+        if s == sha and ref_name.startswith(version_prefix) and "^{}" not in ref_name:
+            if version is None or len(ref_name) < len(version):
+                version = ref_name
+
+    return sha, version
+
+
+def resolve_action_ref(action_ref):
+    parts = action_ref.rsplit("@", 1)
+    if len(parts) != 2:
+        return action_ref
+
+    owner_repo, tag = parts
+    owner, repo = owner_repo.split("/", 1)
+
+    sha, version = _resolve_via_git(owner, repo, tag)
+
+    if sha and version:
+        return f"{owner_repo}@{sha} # {version}"
+
+    return action_ref
+
 
 template = getTemplate(
     package_name=None,
@@ -156,6 +218,7 @@ action_yaml = template.render(
     get_top_options=get_top_options,
     get_group_options=get_group_options,
     get_plugin_options=get_plugin_options,
+    resolve_action_ref=resolve_action_ref,
 )
 
 if changeTextFileContents("action.yml", action_yaml):

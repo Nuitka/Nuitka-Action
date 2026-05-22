@@ -325,7 +325,7 @@ inputs:
       launched from Finder. Default is 'disable'.
   macos-target-arch:
     description: |
-      What architectures is this to supposed to run on. Default and limit
+      What architecture is this supposed to run on. Default and limit
       is what the running Python allows for. Default is "native" which is
       the architecture the Python is run with.
   macos-app-icon:
